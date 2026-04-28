@@ -1,34 +1,29 @@
-// const Home = () => {
-//   return (
-//     <div className="space-y-10">
-//       {/* Hero */}
-//       <section className="bg-gray-100 rounded-xl h-[60vh] flex items-center justify-center text-center">
-//         <div>
-//           <h1 className="text-4xl font-bold mb-3">New Season Collection</h1>
-//           <p className="text-gray-600">Best outfits for 2026</p>
-//         </div>
-//       </section>
+import ProductList from "../../components/product/ProductList/ProductList";
+import { useTranslation } from "react-i18next";
 
-//       {/* Categories */}
-//       <section>
-//         <h2 className="text-xl font-bold mb-4">Categories</h2>
+const Home = () => {
+  const { t } = useTranslation();
 
-//         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-//           {["Men", "Women", "Kids", "Accessories"].map((c) => (
-//             <div
-//               key={c}
-//               className="border rounded-lg p-6 text-center hover:shadow-md cursor-pointer transition"
-//             >
-//               {c}
-//             </div>
-//           ))}
-//         </div>
-//       </section>
-//     </div>
-//   );
-// };
+  return (
+    <div className="space-y-16">
+      {/* Hero (luxury style) */}
+      <section className="h-[70vh] flex items-end bg-black text-white p-10">
+        <div>
+          <h1 className="text-5xl font-light tracking-wide">{t("home.heroTitle")}</h1>
+          <p className="mt-3 text-gray-300">{t("home.heroSubtitle")}</p>
+        </div>
+      </section>
 
-// export default Home;
-export default function Home() {
-  return <div className="bg-blue-500 text-white p-10 text-3xl">TEST</div>;
-}
+      {/* Products */}
+      <section>
+        <h2 className="text-2xl font-light mb-8 tracking-wide">
+          {t("home.featuredTitle")}
+        </h2>
+
+        <ProductList />
+      </section>
+    </div>
+  );
+};
+
+export default Home;
