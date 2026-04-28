@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useContext } from "react";
-import { LanguageContext } from "../../context/language/LanguageContext";
+import { LanguageContext } from "../../../context/language/LanguageContext";
 
 const Navbar = () => {
   const [search, setSearch] = useState("");
