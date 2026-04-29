@@ -1,0 +1,27 @@
+{
+  "app": {
+    "brand": "Z-STORE"
+  },
+  "nav": {
+    "home": "Home",
+    "products": "Products",
+    "cart": "Cart",
+    "login": "Login"
+  },
+  "search": {
+    "placeholder": "Search...",
+    "button": "Search"
+  },
+  "home": {
+    "heroTitle": "AUTUMN / WINTER",
+    "heroSubtitle": "Luxury fashion collection 2026",
+    "featuredTitle": "Featured Pieces"
+  },
+  "products": {
+    "title": "Products",
+    "searchResultFor": "Search results for:"
+  },
+  "errors": {
+    "notFound": "404 - Page Not Found"
+  }
+}

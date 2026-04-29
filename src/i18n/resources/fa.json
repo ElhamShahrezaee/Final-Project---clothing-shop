@@ -1,0 +1,27 @@
+{
+  "app": {
+    "brand": "Z-STORE"
+  },
+  "nav": {
+    "home": "خانه",
+    "products": "محصولات",
+    "cart": "سبد خرید",
+    "login": "ورود"
+  },
+  "search": {
+    "placeholder": "جستجو...",
+    "button": "جستجو"
+  },
+  "home": {
+    "heroTitle": "پاییز / زمستان",
+    "heroSubtitle": "کالکشن لوکس ۲۰۲۶",
+    "featuredTitle": "منتخب‌ها"
+  },
+  "products": {
+    "title": "صفحه محصولات",
+    "searchResultFor": "نتیجه جستجو برای:"
+  },
+  "errors": {
+    "notFound": "۴۰۴ - صفحه پیدا نشد"
+  }
+}
