@@ -1,5 +1,18 @@
-const Skeleton = () => {
-  return <div className="animate-pulse bg-gray-300 h-32 w-full rounded-md" />;
+type SkeletonProps = {
+  className?: string;
+};
+
+const Skeleton = ({ className }: SkeletonProps) => {
+  return (
+    <div
+      className={[
+        "animate-pulse bg-gray-200/80 dark:bg-gray-700/40 rounded-md",
+        className,
+      ]
+        .filter(Boolean)
+        .join(" ")}
+    />
+  );
 };
 
 export default Skeleton;
