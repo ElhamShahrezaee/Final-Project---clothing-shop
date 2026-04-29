@@ -21,17 +21,18 @@ i18n.use(initReactI18next).init({
   interpolation: { escapeValue: false },
 });
 
-function applyDirection(lang: string) {
-  const dir = lang === "fa" ? "rtl" : "ltr";
+function applyDocumentLanguage(lang: string) {
+  // Keep the layout direction stable to avoid UI mirroring.
+  // We only switch the language, not the document direction.
   document.documentElement.lang = lang;
-  document.documentElement.dir = dir;
+  document.documentElement.dir = "ltr";
 }
 
-applyDirection(i18n.language);
+applyDocumentLanguage(i18n.language);
 
 i18n.on("languageChanged", (lang) => {
   localStorage.setItem(STORAGE_KEY, lang);
-  applyDirection(lang);
+  applyDocumentLanguage(lang);
 });
 
 export default i18n;
