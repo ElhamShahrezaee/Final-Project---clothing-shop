@@ -6,16 +6,7 @@ import i18n from "../../../i18n";
 const Header = () => {
   const [search, setSearch] = useState("");
   const { t } = useTranslation();
-  const [lang, setLang] = useState<"fa" | "en">(i18n.language === "en" ? "en" : "fa");
   const navigate = useNavigate();
-
-  const toggleLang = () => {
-    setLang((prev) => {
-      const next = prev === "fa" ? "en" : "fa";
-      void i18n.changeLanguage(next);
-      return next;
-    });
-  };
 
   const submitSearch = () => {
     const q = search.trim();
@@ -53,10 +44,13 @@ const Header = () => {
 
           {/* Language button */}
           <button
-            onClick={toggleLang}
+            onClick={() => {
+              const next = i18n.language === "fa" ? "en" : "fa";
+              void i18n.changeLanguage(next);
+            }}
             className="border px-3 py-1 rounded-full hover:bg-black hover:text-white transition"
           >
-            {lang === "fa" ? "EN" : "FA"}
+            {i18n.language === "fa" ? "EN" : "FA"}
           </button>
 
           {/* Cart */}

@@ -1,6 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState, useContext } from "react";
-import { LanguageContext } from "../../../context/language/LanguageContext";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import i18n from "../../../i18n";
 
@@ -8,14 +7,6 @@ const Navbar = () => {
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
   const { t } = useTranslation();
-
-  const context = useContext(LanguageContext);
-
-  if (!context) {
-    throw new Error("LanguageContext must be used inside LanguageProvider");
-  }
-
-  const { lang, toggleLang } = context;
 
   const handleSearch = () => {
     if (search.trim()) {
@@ -51,12 +42,12 @@ const Navbar = () => {
 
         <button
           onClick={() => {
-            toggleLang();
-            void i18n.changeLanguage(lang === "fa" ? "en" : "fa");
+            const next = i18n.language === "fa" ? "en" : "fa";
+            void i18n.changeLanguage(next);
           }}
           className="bg-yellow-400 text-black px-3 py-1 rounded"
         >
-          {lang === "fa" ? "EN" : "FA"}
+          {i18n.language === "fa" ? "EN" : "FA"}
         </button>
       </div>
     </div>
