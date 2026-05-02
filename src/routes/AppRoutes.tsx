@@ -7,6 +7,8 @@ import Cart from "../pages/Cart/Cart";
 import NotFound from "../pages/NotFound/NotFound";
 import AdminLayout from "../components/layouts/AdminLayout";
 import AdminDashboard from "../pages/Admin/Dashboard/AdminDashboard";
+import AdminProtectedRoute from "./AdminProtectedRoute";
+import AdminLoginRoute from "./AdminLoginRoute";
 
 const AppRoutes = () => {
   return (
@@ -18,9 +20,13 @@ const AppRoutes = () => {
         <Route path="/cart" element={<Cart />} />
       </Route>
 
-      <Route path="/admin" element={<AdminLayout />}>
-        <Route index element={<Navigate to="/admin/dashboard" replace />} />
-        <Route path="dashboard" element={<AdminDashboard />} />
+      <Route path="/admin/login" element={<AdminLoginRoute />} />
+
+      <Route path="/admin" element={<AdminProtectedRoute />}>
+        <Route element={<AdminLayout />}>
+          <Route index element={<Navigate to="/admin/dashboard" replace />} />
+          <Route path="dashboard" element={<AdminDashboard />} />
+        </Route>
       </Route>
 
       <Route path="*" element={<NotFound />} />

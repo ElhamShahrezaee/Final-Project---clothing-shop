@@ -1,19 +1,16 @@
 import type { User } from "./types";
-
-const TOKEN_KEY = "auth_token";
-const REFRESH_TOKEN_KEY = "auth_refresh_token";
-const USER_KEY = "auth_user";
-
-export function getStoredToken(): string | null {
-  return localStorage.getItem(TOKEN_KEY);
-}
+import {
+  AUTH_REFRESH_TOKEN_KEY,
+  AUTH_TOKEN_KEY,
+  AUTH_USER_KEY,
+} from "../../lib/auth/tokenStorage";
 
 export function getStoredRefreshToken(): string | null {
-  return localStorage.getItem(REFRESH_TOKEN_KEY);
+  return localStorage.getItem(AUTH_REFRESH_TOKEN_KEY);
 }
 
 export function getStoredUser(): User | null {
-  const raw = localStorage.getItem(USER_KEY);
+  const raw = localStorage.getItem(AUTH_USER_KEY);
   if (!raw) return null;
   try {
     return JSON.parse(raw) as User;
@@ -27,13 +24,15 @@ export function saveAuthSession(
   refreshToken: string,
   user: User,
 ): void {
-  localStorage.setItem(TOKEN_KEY, token);
-  localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
-  localStorage.setItem(USER_KEY, JSON.stringify(user));
+  localStorage.setItem(AUTH_TOKEN_KEY, token);
+  localStorage.setItem(AUTH_REFRESH_TOKEN_KEY, refreshToken);
+  localStorage.setItem(AUTH_USER_KEY, JSON.stringify(user));
 }
 
 export function clearAuthSession(): void {
-  localStorage.removeItem(TOKEN_KEY);
-  localStorage.removeItem(REFRESH_TOKEN_KEY);
-  localStorage.removeItem(USER_KEY);
+  localStorage.removeItem(AUTH_TOKEN_KEY);
+  localStorage.removeItem(AUTH_REFRESH_TOKEN_KEY);
+  localStorage.removeItem(AUTH_USER_KEY);
 }
+
+export { getStoredToken } from "../../lib/auth/tokenStorage";

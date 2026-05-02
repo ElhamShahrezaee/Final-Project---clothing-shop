@@ -1,6 +1,15 @@
-import { Outlet, NavLink } from "react-router-dom";
+import { Outlet, NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/auth/useAuth";
 
 export default function AdminLayout() {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/admin/login", { replace: true });
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900">
       <div className="mx-auto max-w-6xl px-4 py-6">
@@ -20,6 +29,13 @@ export default function AdminLayout() {
             >
               Dashboard
             </NavLink>
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="text-gray-600 hover:text-gray-900 hover:underline"
+            >
+              خروج
+            </button>
           </nav>
         </header>
 
