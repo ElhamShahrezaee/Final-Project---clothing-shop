@@ -1,8 +1,8 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import type { FormEvent } from "react";
-import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../../context/auth/useAuth";
+import { useAdminLocale } from "../../../hooks/useAdminLocale";
 
 export default function AdminLogin() {
   const [email, setEmail] = useState("");
@@ -12,13 +12,11 @@ export default function AdminLogin() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { login } = useAuth();
-  const { i18n } = useTranslation();
+  const { isFa, dir, textAlign } = useAdminLocale();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const isFa = i18n.language === "fa";
   const inputDir = isFa ? "rtl" : "ltr";
-  const inputAlign = isFa ? "text-right" : "text-left";
   const passwordPadding = isFa ? "pl-12" : "pr-12";
   const togglePosition = isFa ? "left-0" : "right-0";
 
@@ -42,12 +40,15 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
+    <div
+      dir={dir}
+      className={`flex min-h-screen items-center justify-center bg-gray-50 px-4 ${textAlign}`}
+    >
       <div className="w-full max-w-md rounded-xl border bg-white p-8 shadow-sm">
-        <h1 className="text-center text-2xl font-semibold text-gray-900">
+        <h1 className={`text-2xl font-semibold text-gray-900 ${textAlign}`}>
           ورود به پنل ادمین
         </h1>
-        <p className="mt-2 text-center text-sm text-gray-500">
+        <p className={`mt-2 text-sm text-gray-500 ${textAlign}`}>
           با حساب ادمین وارد شوید
         </p>
 
@@ -55,7 +56,7 @@ export default function AdminLogin() {
           <div>
             <label
               htmlFor="email"
-              className={`mb-1.5 block text-sm font-medium text-gray-700 ${isFa ? "text-right" : "text-left"}`}
+              className={`mb-1.5 block text-sm font-medium text-gray-700 ${textAlign}`}
             >
               ایمیل
             </label>
@@ -67,14 +68,14 @@ export default function AdminLogin() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               dir={inputDir}
-              className={`w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm outline-none transition focus:border-gray-900 focus:ring-1 focus:ring-gray-900 ${inputAlign}`}
+              className={`w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm outline-none transition focus:border-gray-900 focus:ring-1 focus:ring-gray-900 ${textAlign}`}
             />
           </div>
 
           <div>
             <label
               htmlFor="password"
-              className={`mb-1.5 block text-sm font-medium text-gray-700 ${isFa ? "text-right" : "text-left"}`}
+              className={`mb-1.5 block text-sm font-medium text-gray-700 ${textAlign}`}
             >
               رمز عبور
             </label>
@@ -87,7 +88,7 @@ export default function AdminLogin() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 dir={inputDir}
-                className={`w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm outline-none transition focus:border-gray-900 focus:ring-1 focus:ring-gray-900 ${passwordPadding} ${inputAlign}`}
+                className={`w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm outline-none transition focus:border-gray-900 focus:ring-1 focus:ring-gray-900 ${passwordPadding} ${textAlign}`}
               />
               <button
                 type="button"
@@ -101,7 +102,10 @@ export default function AdminLogin() {
           </div>
 
           {error && (
-            <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700" role="alert">
+            <p
+              className={`rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700 ${textAlign}`}
+              role="alert"
+            >
               {error}
             </p>
           )}

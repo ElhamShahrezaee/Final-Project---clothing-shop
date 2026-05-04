@@ -1,4 +1,4 @@
-import {
+﻿import {
   ResponsiveContainer,
   LineChart,
   Line,
@@ -7,6 +7,7 @@ import {
   Tooltip,
   CartesianGrid,
 } from "recharts";
+import { useAdminLocale } from "../../../hooks/useAdminLocale";
 
 const mockSales = [
   { day: "Mon", revenue: 1200, orders: 12 },
@@ -19,22 +20,22 @@ const mockSales = [
 ];
 
 export default function AdminDashboard() {
+  const { textAlign } = useAdminLocale();
+
   return (
-    <div className="space-y-6">
+    <div className={`space-y-6 ${textAlign}`}>
       <div>
-        <h1 className="text-2xl font-semibold">Dashboard</h1>
-        <p className="mt-1 text-sm text-gray-600">
-          Overview of store activity (mock data for phase 1).
-        </p>
+        <h1 className="text-2xl font-semibold text-gray-900">داشبورد</h1>
+        <p className="mt-1 text-sm text-gray-600">نمای کلی فعالیت فروشگاه</p>
       </div>
 
-      <div className="rounded-xl border bg-white p-4">
-        <div className="flex items-end justify-between gap-4">
+      <div className="rounded-xl border border-gray-200 bg-white p-4">
+        <div className={`flex items-end justify-between gap-4 ${textAlign}`}>
           <div>
-            <div className="text-sm font-medium">Weekly Revenue</div>
-            <div className="text-xs text-gray-500">Mock data</div>
+            <div className="text-sm font-medium text-gray-900">درآمد هفتگی</div>
+            <div className="text-xs text-gray-500">داده نمونه</div>
           </div>
-          <div className="text-xs text-gray-500">Last 7 days</div>
+          <div className="text-xs text-gray-500">۷ روز گذشته</div>
         </div>
 
         <div className="mt-4 h-64">
@@ -44,7 +45,13 @@ export default function AdminDashboard() {
               <XAxis dataKey="day" />
               <YAxis />
               <Tooltip />
-              <Line type="monotone" dataKey="revenue" stroke="#111827" strokeWidth={2} dot={false} />
+              <Line
+                type="monotone"
+                dataKey="revenue"
+                stroke="#111827"
+                strokeWidth={2}
+                dot={false}
+              />
             </LineChart>
           </ResponsiveContainer>
         </div>
