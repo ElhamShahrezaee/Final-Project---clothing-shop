@@ -1,15 +1,20 @@
-﻿import type { AdminProduct } from "../../../../features/admin/products/types";
+import type { AdminProduct } from "../../../../features/admin/products/types";
 import { formatPrice } from "../../../../features/admin/products/utils/formatPrice";
 import { useAdminLocale } from "../../../../hooks/useAdminLocale";
 import Spinner from "../../../../components/common/Spinner/Spinner";
+
+export type ProductTableVariant = "manage" | "inventory";
 
 type ProductTableProps = {
   products: AdminProduct[];
   isLoading: boolean;
   isError: boolean;
   errorMessage?: string;
-  onEdit: (product: AdminProduct) => void;
-  onDelete: (product: AdminProduct) => void;
+  variant?: ProductTableVariant;
+  onEdit?: (product: AdminProduct) => void;
+  onDelete?: (product: AdminProduct) => void;
+  onChangeStock?: (product: AdminProduct) => void;
+  onChangePrice?: (product: AdminProduct) => void;
 };
 
 const thClass = "px-3 py-3 text-xs font-semibold uppercase tracking-wide text-gray-600";
@@ -20,8 +25,11 @@ export default function ProductTable({
   isLoading,
   isError,
   errorMessage,
+  variant = "manage",
   onEdit,
   onDelete,
+  onChangeStock,
+  onChangePrice,
 }: ProductTableProps) {
   const { isFa, textAlign } = useAdminLocale();
 
@@ -102,20 +110,41 @@ export default function ProductTable({
               </td>
               <td className={tdClass}>
                 <div className="flex flex-wrap gap-2">
-                  <button
-                    type="button"
-                    onClick={() => onEdit(product)}
-                    className="rounded-md border border-gray-300 px-2.5 py-1 text-xs text-gray-700 hover:bg-gray-100"
-                  >
-                    ویرایش
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => onDelete(product)}
-                    className="rounded-md border border-red-200 px-2.5 py-1 text-xs text-red-700 hover:bg-red-50"
-                  >
-                    حذف
-                  </button>
+                  {variant === "inventory" ? (
+                    <>
+                      <button
+                        type="button"
+                        onClick={() => onChangeStock?.(product)}
+                        className="rounded-md border border-gray-300 px-2.5 py-1 text-xs text-gray-700 hover:bg-gray-100"
+                      >
+                        تغییر موجودی
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => onChangePrice?.(product)}
+                        className="rounded-md border border-blue-200 px-2.5 py-1 text-xs text-blue-700 hover:bg-blue-50"
+                      >
+                        تغییر قیمت
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        type="button"
+                        onClick={() => onEdit?.(product)}
+                        className="rounded-md border border-gray-300 px-2.5 py-1 text-xs text-gray-700 hover:bg-gray-100"
+                      >
+                        ویرایش
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => onDelete?.(product)}
+                        className="rounded-md border border-red-200 px-2.5 py-1 text-xs text-red-700 hover:bg-red-50"
+                      >
+                        حذف
+                      </button>
+                    </>
+                  )}
                 </div>
               </td>
             </tr>
