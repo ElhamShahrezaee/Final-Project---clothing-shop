@@ -1,42 +1,42 @@
-import type { AdminPageSize } from "../../../../features/admin/products/types";
+import type { OrderPageSize } from "../../../../features/admin/orders/types";
 
-const PAGE_SIZE_OPTIONS: AdminPageSize[] = [10, 20, 50, 100];
+const PAGE_SIZE_OPTIONS: OrderPageSize[] = [10, 20, 50, 100];
 
-type ProductPaginationProps = {
+type OrderPaginationProps = {
   page: number;
   totalPages: number;
   total: number;
-  limit: AdminPageSize;
+  limit: OrderPageSize;
   onPageChange: (page: number) => void;
-  onLimitChange: (limit: AdminPageSize) => void;
+  onLimitChange: (limit: OrderPageSize) => void;
 };
 
-export default function ProductPagination({
+export default function OrderPagination({
   page,
   totalPages,
   total,
   limit,
   onPageChange,
   onLimitChange,
-}: ProductPaginationProps) {
+}: OrderPaginationProps) {
   const from = total === 0 ? 0 : (page - 1) * limit + 1;
   const to = Math.min(page * limit, total);
 
   return (
     <div className="flex flex-wrap items-center justify-between gap-3 border-t border-gray-200 pt-4">
       <p className="text-sm text-gray-600">
-        نمایش {from} تا {to} از {total} محصول
+        نمایش {from} تا {to} از {total} سفارش
       </p>
 
       <div className="flex flex-wrap items-center gap-3">
         <div className="flex items-center gap-2">
-          <label htmlFor="product-page-size" className="text-sm text-gray-600">
+          <label htmlFor="page-size" className="text-sm text-gray-600">
             تعداد در صفحه
           </label>
           <select
-            id="product-page-size"
+            id="page-size"
             value={limit}
-            onChange={(e) => onLimitChange(Number(e.target.value) as AdminPageSize)}
+            onChange={(e) => onLimitChange(Number(e.target.value) as OrderPageSize)}
             className="rounded-lg border border-gray-300 px-2 py-1.5 text-sm outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900"
           >
             {PAGE_SIZE_OPTIONS.map((size) => (

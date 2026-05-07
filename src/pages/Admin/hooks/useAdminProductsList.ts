@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { useAdminProductsQuery } from "../../../features/admin/products/queries/useAdminProductsQuery";
+import type { AdminPageSize } from "../../../features/admin/products/types";
 import type { ActiveFilter } from "../Products/components/ProductFilters";
-
-const PAGE_SIZE = 10;
 
 export function useAdminProductsList() {
   const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState<AdminPageSize>(10);
   const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
   const [categoryInput, setCategoryInput] = useState("");
@@ -31,13 +31,13 @@ export function useAdminProductsList() {
   const filters = useMemo(
     () => ({
       page,
-      limit: PAGE_SIZE,
+      limit,
       search: search || undefined,
       category: category || undefined,
       isActive:
         activeFilter === "all" ? undefined : activeFilter === "active",
     }),
-    [page, search, category, activeFilter],
+    [page, limit, search, category, activeFilter],
   );
 
   const { data, isLoading, isFetching, isError, error } = useAdminProductsQuery(filters);
@@ -56,9 +56,14 @@ export function useAdminProductsList() {
     setPage(1);
   };
 
+  const handleLimitChange = (value: AdminPageSize) => {
+    setLimit(value);
+    setPage(1);
+  };
+
   const pagination = data?.pagination ?? {
     page: 1,
-    limit: PAGE_SIZE,
+    limit,
     total: 0,
     totalPages: 1,
   };
@@ -77,6 +82,8 @@ export function useAdminProductsList() {
     error,
     page,
     setPage,
+    limit,
+    handleLimitChange,
     pagination,
   };
 }

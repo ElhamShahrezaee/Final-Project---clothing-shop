@@ -20,6 +20,8 @@ export default function AdminProducts() {
     isError,
     error,
     setPage,
+    limit,
+    handleLimitChange,
     pagination,
   } = useAdminProductsList();
 
@@ -55,8 +57,9 @@ export default function AdminProducts() {
           page={pagination.page}
           totalPages={pagination.totalPages}
           total={pagination.total}
-          limit={pagination.limit}
+          limit={limit}
           onPageChange={setPage}
+          onLimitChange={handleLimitChange}
         />
       )}
     </div>

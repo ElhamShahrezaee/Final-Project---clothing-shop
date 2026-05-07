@@ -1,3 +1,5 @@
+export type AdminPageSize = 10 | 20 | 50 | 100;
+
 export interface AdminProduct {
   id: string;
   name: string;
@@ -16,7 +18,7 @@ export interface AdminProduct {
 
 export interface AdminProductsFilters {
   page?: number;
-  limit?: number;
+  limit?: AdminPageSize;
   search?: string;
   category?: string;
   brand?: string;
