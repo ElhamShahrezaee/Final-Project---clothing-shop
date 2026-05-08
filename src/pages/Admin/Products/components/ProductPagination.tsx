@@ -23,7 +23,7 @@ export default function ProductPagination({
   const to = Math.min(page * limit, total);
 
   return (
-    <div className="flex flex-wrap items-center justify-between gap-3 border-t border-gray-200 pt-4">
+    <div className="flex flex-wrap items-center justify-between gap-3">
       <p className="text-sm text-gray-600">
         نمایش {from} تا {to} از {total} محصول
       </p>

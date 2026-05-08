@@ -5,6 +5,7 @@ import type {
 } from "../../../features/admin/orders/types";
 import { useAdminOrdersQuery } from "../../../features/admin/orders/queries/useAdminOrdersQuery";
 import { useAdminLocale } from "../../../hooks/useAdminLocale";
+import AdminListPage from "../components/AdminListPage";
 import OrderFilters from "./components/OrderFilters";
 import OrderPagination from "./components/OrderPagination";
 import OrderTable from "./components/OrderTable";
@@ -50,37 +51,37 @@ export default function AdminOrders() {
   };
 
   return (
-    <div className={`space-y-6 ${textAlign}`}>
-      <div>
-        <h1 className="text-2xl font-semibold text-gray-900">سفارشات</h1>
-        <p className="mt-1 text-sm text-gray-600">مدیریت سفارش‌های مشتریان</p>
-      </div>
-
-      <div className="rounded-xl border border-gray-200 bg-white p-4">
+    <AdminListPage
+      title="سفارشات"
+      description="مدیریت سفارش‌های مشتریان"
+      textAlign={textAlign}
+      filters={
         <OrderFilters
           statusFilter={statusFilter}
           onStatusChange={handleStatusChange}
           onReset={handleResetFilters}
         />
-      </div>
-
-      <OrderTable
-        orders={data?.orders ?? []}
-        isLoading={isLoading || isFetching}
-        isError={isError}
-        errorMessage={error?.message}
-      />
-
-      {!isLoading && !isError && (
-        <OrderPagination
-          page={pagination.page}
-          totalPages={pagination.totalPages}
-          total={pagination.total}
-          limit={limit}
-          onPageChange={setPage}
-          onLimitChange={handleLimitChange}
+      }
+      table={
+        <OrderTable
+          orders={data?.orders ?? []}
+          isLoading={isLoading || isFetching}
+          isError={isError}
+          errorMessage={error?.message}
         />
-      )}
-    </div>
+      }
+      pagination={
+        !isLoading && !isError ? (
+          <OrderPagination
+            page={pagination.page}
+            totalPages={pagination.totalPages}
+            total={pagination.total}
+            limit={limit}
+            onPageChange={setPage}
+            onLimitChange={handleLimitChange}
+          />
+        ) : undefined
+      }
+    />
   );
 }

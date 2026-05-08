@@ -24,7 +24,7 @@ export default function AdminSidebar() {
   return (
     <aside
       dir={dir}
-      className={`flex w-56 shrink-0 flex-col border-s border-gray-200 bg-white ${textAlign}`}
+      className={`flex h-full w-56 shrink-0 flex-col border-s border-gray-200 bg-white ${textAlign}`}
     >
       <div className="border-b border-gray-200 px-4 py-5">
         <p className="text-lg font-semibold tracking-wide text-gray-900">پنل ادمین</p>
