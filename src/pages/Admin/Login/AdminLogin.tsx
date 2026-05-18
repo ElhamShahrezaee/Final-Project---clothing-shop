@@ -1,8 +1,13 @@
-﻿import { useState } from "react";
+﻿import { useRef, useState } from "react";
 import type { FormEvent } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import {
+  VisibilityIcon,
+  VisibilityOffIcon,
+} from "../../../components/common/icons/MaterialEyeIcons";
 import { useAuth } from "../../../context/auth/useAuth";
 import { useAdminLocale } from "../../../hooks/useAdminLocale";
+import { saveLoginCredential } from "../../../lib/auth/saveLoginCredential";
 
 export default function AdminLogin() {
   const [email, setEmail] = useState("");
@@ -10,6 +15,7 @@ export default function AdminLogin() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const passwordRef = useRef<HTMLInputElement>(null);
 
   const { login } = useAuth();
   const { isFa, dir, textAlign } = useAdminLocale();
@@ -17,20 +23,27 @@ export default function AdminLogin() {
   const location = useLocation();
 
   const inputDir = isFa ? "rtl" : "ltr";
-  const passwordPadding = isFa ? "pl-12" : "pr-12";
-  const togglePosition = isFa ? "left-0" : "right-0";
+  const passwordPadding = isFa ? "pl-11" : "pr-11";
+  const togglePosition = isFa ? "left-2" : "right-2";
 
   const from =
     (location.state as { from?: { pathname?: string } } | null)?.from
       ?.pathname ?? "/admin/dashboard";
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
     setIsSubmitting(true);
 
+    const trimmedEmail = email.trim();
+    const passwordInput = passwordRef.current;
+    if (passwordInput) {
+      passwordInput.type = "password";
+    }
+
     try {
-      await login(email.trim(), password);
+      await login(trimmedEmail, password);
+      await saveLoginCredential(trimmedEmail, password);
       navigate(from, { replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : "خطا در ورود");
@@ -52,7 +65,15 @@ export default function AdminLogin() {
           با حساب ادمین وارد شوید
         </p>
 
-        <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+        <form
+          id="admin-login-form"
+          name="admin-login"
+          method="post"
+          action="/admin/login"
+          autoComplete="on"
+          onSubmit={handleSubmit}
+          className="mt-8 space-y-5"
+        >
           <div>
             <label
               htmlFor="email"
@@ -62,13 +83,18 @@ export default function AdminLogin() {
             </label>
             <input
               id="email"
+              name="username"
               type="email"
-              autoComplete="email"
+              inputMode="email"
+              autoComplete="username"
+              autoCapitalize="none"
+              autoCorrect="off"
+              spellCheck={false}
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              dir={inputDir}
-              className={`w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm outline-none transition focus:border-gray-900 focus:ring-1 focus:ring-gray-900 ${textAlign}`}
+              dir="ltr"
+              className={`w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm outline-none transition focus:border-gray-900 focus:ring-1 focus:ring-gray-900 text-left`}
             />
           </div>
 
@@ -79,24 +105,33 @@ export default function AdminLogin() {
             >
               رمز عبور
             </label>
-            <div className="relative">
+            <div
+              className={`relative flex items-center rounded-lg border border-gray-300 bg-white transition focus-within:border-gray-900 focus-within:ring-1 focus-within:ring-gray-900 ${textAlign}`}
+            >
               <input
+                ref={passwordRef}
                 id="password"
+                name="password"
                 type={showPassword ? "text" : "password"}
                 autoComplete="current-password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 dir={inputDir}
-                className={`w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm outline-none transition focus:border-gray-900 focus:ring-1 focus:ring-gray-900 ${passwordPadding} ${textAlign}`}
+                className={`w-full border-0 bg-transparent px-4 py-2.5 text-sm outline-none ring-0 focus:ring-0 ${passwordPadding}`}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword((prev) => !prev)}
-                className={`absolute inset-y-0 ${togglePosition} px-3 text-xs text-gray-500 hover:text-gray-900`}
+                className={`absolute top-1/2 ${togglePosition} z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-md text-gray-600 transition hover:bg-gray-100 hover:text-gray-900`}
                 aria-label={showPassword ? "مخفی کردن رمز عبور" : "نمایش رمز عبور"}
+                aria-pressed={showPassword}
               >
-                {showPassword ? "مخفی" : "نمایش"}
+                {showPassword ? (
+                  <VisibilityOffIcon />
+                ) : (
+                  <VisibilityIcon />
+                )}
               </button>
             </div>
           </div>

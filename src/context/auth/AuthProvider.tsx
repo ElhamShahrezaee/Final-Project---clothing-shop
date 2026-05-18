@@ -1,7 +1,12 @@
+import axios from "axios";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { getCurrentUser } from "../../features/auth/api/getMe";
 import { loginUser } from "../../features/auth/api/login";
 import type { User } from "../../features/auth/types";
+
+function isUnauthorizedError(error: unknown): boolean {
+  return axios.isAxiosError(error) && error.response?.status === 401;
+}
 import {
   clearAuthSession,
   getStoredRefreshToken,
@@ -27,6 +32,9 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         return;
       }
 
+      // Keep the user logged in across refresh using stored session.
+      if (!cancelled) setUser(storedUser);
+
       try {
         const currentUser = await getCurrentUser();
         if (!cancelled) {
@@ -36,9 +44,12 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
             saveAuthSession(token, refreshToken, currentUser);
           }
         }
-      } catch {
-        clearAuthSession();
-        if (!cancelled) setUser(null);
+      } catch (error) {
+        // Only logout when the token is invalid/expired — not on network/API outages.
+        if (isUnauthorizedError(error)) {
+          clearAuthSession();
+          if (!cancelled) setUser(null);
+        }
       } finally {
         if (!cancelled) setIsLoading(false);
       }
