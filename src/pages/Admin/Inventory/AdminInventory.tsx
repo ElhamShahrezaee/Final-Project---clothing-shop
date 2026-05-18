@@ -7,12 +7,15 @@ import AdminListPage from "../components/AdminListPage";
 import ProductFilters from "../Products/components/ProductFilters";
 import ProductPagination from "../Products/components/ProductPagination";
 import ProductTable from "../Products/components/ProductTable";
+import ChangePriceModal from "./components/ChangePriceModal";
 import ChangeStockModal from "./components/ChangeStockModal";
 
 export default function AdminInventory() {
   const { textAlign } = useAdminLocale();
-  const [productToEdit, setProductToEdit] = useState<AdminProduct | null>(null);
-  const [saveError, setSaveError] = useState<string | null>(null);
+  const [productForStock, setProductForStock] = useState<AdminProduct | null>(null);
+  const [productForPrice, setProductForPrice] = useState<AdminProduct | null>(null);
+  const [stockSaveError, setStockSaveError] = useState<string | null>(null);
+  const [priceSaveError, setPriceSaveError] = useState<string | null>(null);
 
   const updateMutation = useUpdateAdminProductMutation();
 
@@ -35,33 +38,64 @@ export default function AdminInventory() {
   } = useAdminProductsList();
 
   const handleChangeStockClick = (product: AdminProduct) => {
-    setSaveError(null);
-    setProductToEdit(product);
+    setStockSaveError(null);
+    setProductForStock(product);
   };
 
-  const handleCancel = () => {
+  const handleChangePriceClick = (product: AdminProduct) => {
+    setPriceSaveError(null);
+    setProductForPrice(product);
+  };
+
+  const handleStockCancel = () => {
     if (updateMutation.isPending) return;
-    setProductToEdit(null);
-    setSaveError(null);
+    setProductForStock(null);
+    setStockSaveError(null);
   };
 
-  const handleSave = async (stock: number) => {
-    if (!productToEdit) return;
+  const handlePriceCancel = () => {
+    if (updateMutation.isPending) return;
+    setProductForPrice(null);
+    setPriceSaveError(null);
+  };
 
-    setSaveError(null);
+  const handleStockSave = async (stock: number) => {
+    if (!productForStock) return;
+
+    setStockSaveError(null);
 
     try {
       await updateMutation.mutateAsync({
-        productId: productToEdit.id,
+        productId: productForStock.id,
         payload: {
-          name: productToEdit.name,
-          price: productToEdit.price,
+          name: productForStock.name,
+          price: productForStock.price,
           stock,
         },
       });
-      setProductToEdit(null);
+      setProductForStock(null);
     } catch (err) {
-      setSaveError(err instanceof Error ? err.message : "خطا در بروزرسانی موجودی");
+      setStockSaveError(err instanceof Error ? err.message : "خطا در بروزرسانی موجودی");
+    }
+  };
+
+  const handlePriceSave = async (price: number) => {
+    if (!productForPrice) return;
+
+    setPriceSaveError(null);
+
+    try {
+      await updateMutation.mutateAsync({
+        productId: productForPrice.id,
+        payload: {
+          name: productForPrice.name,
+          price,
+          stock: productForPrice.stock,
+        },
+      });
+      setProductForPrice(null);
+    } catch (err) {
+      setPriceSaveError(err instanceof Error ? err.message : "خطا در بروزرسانی قیمت");
     }
   };
 
@@ -90,6 +124,7 @@ export default function AdminInventory() {
             errorMessage={error?.message}
             variant="inventory"
             onChangeStock={handleChangeStockClick}
+            onChangePrice={handleChangePriceClick}
           />
         }
         pagination={
@@ -106,13 +141,23 @@ export default function AdminInventory() {
         }
       />
 
-      {productToEdit && (
+      {productForStock && (
         <ChangeStockModal
-          product={productToEdit}
+          product={productForStock}
           isSaving={updateMutation.isPending}
-          errorMessage={saveError}
-          onSave={handleSave}
-          onCancel={handleCancel}
+          errorMessage={stockSaveError}
+          onSave={handleStockSave}
+          onCancel={handleStockCancel}
+        />
+      )}
+
+      {productForPrice && (
+        <ChangePriceModal
+          product={productForPrice}
+          isSaving={updateMutation.isPending}
+          errorMessage={priceSaveError}
+          onSave={handlePriceSave}
+          onCancel={handlePriceCancel}
         />
       )}
     </>
