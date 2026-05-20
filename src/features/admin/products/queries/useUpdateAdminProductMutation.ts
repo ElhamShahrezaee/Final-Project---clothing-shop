@@ -1,22 +1,45 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
+  quickUpdateAdminProduct,
   updateAdminProduct,
-  type UpdateAdminProductPayload,
+  type QuickUpdateAdminProductPayload,
 } from "../api/updateAdminProduct";
+import type { AdminProductFormValues } from "../types/productForm";
+import type { ProductFormDataOptions } from "../utils/buildProductFormData";
 
-type UpdateAdminProductVariables = {
+type FullUpdateVariables = {
   productId: string;
-  payload: UpdateAdminProductPayload;
+  values: AdminProductFormValues;
+  options?: ProductFormDataOptions;
+};
+
+type QuickUpdateVariables = {
+  productId: string;
+  payload: QuickUpdateAdminProductPayload;
 };
 
 export function useUpdateAdminProductMutation() {
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: ({ productId, payload }: UpdateAdminProductVariables) =>
-      updateAdminProduct(productId, payload),
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["admin", "products"] });
-    },
+  const invalidate = async () => {
+    await queryClient.invalidateQueries({ queryKey: ["admin", "products"] });
+  };
+
+  const fullUpdate = useMutation({
+    mutationFn: ({ productId, values, options }: FullUpdateVariables) =>
+      updateAdminProduct(productId, values, options),
+    onSuccess: invalidate,
   });
+
+  const quickUpdate = useMutation({
+    mutationFn: ({ productId, payload }: QuickUpdateVariables) =>
+      quickUpdateAdminProduct(productId, payload),
+    onSuccess: invalidate,
+  });
+
+  return {
+    mutateAsync: fullUpdate.mutateAsync,
+    quickMutateAsync: quickUpdate.mutateAsync,
+    isPending: fullUpdate.isPending || quickUpdate.isPending,
+  };
 }

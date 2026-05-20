@@ -59,14 +59,17 @@ export default function ProductTable({
 
   return (
     <div className="h-full min-h-0 overflow-auto">
-      <table className={`w-full min-w-[720px] ${textAlign}`}>
+      <table className={`w-full min-w-[960px] ${textAlign}`}>
         <thead className="sticky top-0 z-10 border-b border-gray-200 bg-gray-50">
           <tr>
             <th className={thClass}>تصویر</th>
             <th className={thClass}>نام</th>
-            <th className={thClass}>دسته</th>
+            <th className={thClass}>دسته‌بندی</th>
+            <th className={thClass}>برند</th>
             <th className={thClass}>قیمت</th>
             <th className={thClass}>موجودی</th>
+            <th className={thClass}>امتیاز</th>
+            <th className={thClass}>تعداد نظرات</th>
             <th className={thClass}>وضعیت</th>
             <th className={thClass}>عملیات</th>
           </tr>
@@ -89,13 +92,13 @@ export default function ProductTable({
               </td>
               <td className={tdClass}>
                 <p className="font-medium text-gray-900">{product.name}</p>
-                {product.brand && (
-                  <p className="mt-0.5 text-xs text-gray-500">{product.brand}</p>
-                )}
               </td>
               <td className={tdClass}>{product.category}</td>
+              <td className={tdClass}>{product.brand?.trim() || "—"}</td>
               <td className={tdClass}>{formatPrice(product.price, isFa)}</td>
               <td className={tdClass}>{product.stock}</td>
+              <td className={tdClass}>{product.rating}</td>
+              <td className={tdClass}>{product.numReviews}</td>
               <td className={tdClass}>
                 <span
                   className={[

@@ -1,11 +1,15 @@
 import { useState } from "react";
 import type { AdminProduct } from "../../../features/admin/products/types";
+import type { AdminProductFormValues } from "../../../features/admin/products/types/productForm";
+import { useCreateAdminProductMutation } from "../../../features/admin/products/queries/useCreateAdminProductMutation";
 import { useDeleteAdminProductMutation } from "../../../features/admin/products/queries/useDeleteAdminProductMutation";
+import { useUpdateAdminProductMutation } from "../../../features/admin/products/queries/useUpdateAdminProductMutation";
 import { useAdminLocale } from "../../../hooks/useAdminLocale";
 import { useAdminProductsList } from "../hooks/useAdminProductsList";
 import AdminListPage from "../components/AdminListPage";
 import DeleteProductModal from "./components/DeleteProductModal";
 import ProductFilters from "./components/ProductFilters";
+import ProductFormModal, { type ProductFormModalMode } from "./components/ProductFormModal";
 import ProductPagination from "./components/ProductPagination";
 import ProductTable from "./components/ProductTable";
 
@@ -13,8 +17,15 @@ export default function AdminProducts() {
   const { textAlign } = useAdminLocale();
   const [productToDelete, setProductToDelete] = useState<AdminProduct | null>(null);
   const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [formMode, setFormMode] = useState<ProductFormModalMode | null>(null);
+  const [productToEdit, setProductToEdit] = useState<AdminProduct | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
 
   const deleteMutation = useDeleteAdminProductMutation();
+  const createMutation = useCreateAdminProductMutation();
+  const updateMutation = useUpdateAdminProductMutation();
+
+  const isFormSaving = createMutation.isPending || updateMutation.isPending;
 
   const {
     searchInput,
@@ -34,6 +45,58 @@ export default function AdminProducts() {
     handleLimitChange,
     pagination,
   } = useAdminProductsList();
+
+  const handleAddClick = () => {
+    setFormError(null);
+    setProductToEdit(null);
+    setFormMode("create");
+  };
+
+  const handleEditClick = (product: AdminProduct) => {
+    setFormError(null);
+    setProductToEdit(product);
+    setFormMode("edit");
+  };
+
+  const handleFormCancel = () => {
+    if (isFormSaving) return;
+    setFormMode(null);
+    setProductToEdit(null);
+    setFormError(null);
+  };
+
+  const handleFormSubmit = async (
+    values: AdminProductFormValues,
+    imageFiles: File[],
+    existingImageUrls: string[],
+  ) => {
+    setFormError(null);
+
+    try {
+      if (formMode === "create") {
+        await createMutation.mutateAsync({
+          values,
+          options: {
+            imageFiles: imageFiles.length > 0 ? imageFiles : undefined,
+          },
+        });
+      } else if (formMode === "edit" && productToEdit) {
+        await updateMutation.mutateAsync({
+          productId: productToEdit.id,
+          values,
+          options: {
+            imageFiles: imageFiles.length > 0 ? imageFiles : undefined,
+            existingImageUrls,
+            isUpdate: true,
+          },
+        });
+      }
+      setFormMode(null);
+      setProductToEdit(null);
+    } catch (err) {
+      setFormError(err instanceof Error ? err.message : "خطا در ذخیره محصول");
+    }
+  };
 
   const handleDeleteClick = (product: AdminProduct) => {
     setDeleteError(null);
@@ -71,15 +134,24 @@ export default function AdminProducts() {
         description="مدیریت محصولات فروشگاه"
         textAlign={textAlign}
         filters={
-          <ProductFilters
-            search={searchInput}
-            category={categoryInput}
-            activeFilter={activeFilter}
-            onSearchChange={setSearchInput}
-            onCategoryChange={setCategoryInput}
-            onActiveFilterChange={handleActiveFilterChange}
-            onReset={handleResetFilters}
-          />
+          <div className="space-y-4">
+            <button
+              type="button"
+              onClick={handleAddClick}
+              className="rounded-lg bg-gray-900 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-gray-800"
+            >
+              اضافه کردن محصول جدید
+            </button>
+            <ProductFilters
+              search={searchInput}
+              category={categoryInput}
+              activeFilter={activeFilter}
+              onSearchChange={setSearchInput}
+              onCategoryChange={setCategoryInput}
+              onActiveFilterChange={handleActiveFilterChange}
+              onReset={handleResetFilters}
+            />
+          </div>
         }
         table={
           <ProductTable
@@ -88,6 +160,7 @@ export default function AdminProducts() {
             isError={isError}
             errorMessage={error?.message}
             variant="manage"
+            onEdit={handleEditClick}
             onDelete={handleDeleteClick}
           />
         }
@@ -104,6 +177,17 @@ export default function AdminProducts() {
           ) : undefined
         }
       />
+
+      {formMode && (
+        <ProductFormModal
+          mode={formMode}
+          product={productToEdit ?? undefined}
+          isSaving={isFormSaving}
+          errorMessage={formError}
+          onSubmit={handleFormSubmit}
+          onCancel={handleFormCancel}
+        />
+      )}
 
       {productToDelete && (
         <DeleteProductModal

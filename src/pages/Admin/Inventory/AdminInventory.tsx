@@ -65,7 +65,7 @@ export default function AdminInventory() {
     setStockSaveError(null);
 
     try {
-      await updateMutation.mutateAsync({
+      await updateMutation.quickMutateAsync({
         productId: productForStock.id,
         payload: {
           name: productForStock.name,
@@ -85,7 +85,7 @@ export default function AdminInventory() {
     setPriceSaveError(null);
 
     try {
-      await updateMutation.mutateAsync({
+      await updateMutation.quickMutateAsync({
         productId: productForPrice.id,
         payload: {
           name: productForPrice.name,
