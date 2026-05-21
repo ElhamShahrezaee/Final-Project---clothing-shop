@@ -22,10 +22,8 @@ i18n.use(initReactI18next).init({
 });
 
 function applyDocumentLanguage(lang: string) {
-  // Keep the layout direction stable to avoid UI mirroring.
-  // We only switch the language, not the document direction.
   document.documentElement.lang = lang;
-  document.documentElement.dir = "ltr";
+  document.documentElement.dir = lang === "fa" ? "rtl" : "ltr";
 }
 
 applyDocumentLanguage(i18n.language);

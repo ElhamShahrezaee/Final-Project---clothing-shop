@@ -16,11 +16,10 @@ const Header = () => {
   };
 
   return (
-    <header className="border-b bg-white sticky top-0 z-50">
-      <div className="max-w-6xl mx-auto px-4 py-4">
+    <header dir="ltr" className="sticky top-0 z-50 border-b bg-white text-left">
+      <div className="mx-auto max-w-6xl px-4 py-4">
         <div className="grid grid-cols-3 items-center">
-          {/* Left: Search */}
-          <div className="flex items-center gap-2 justify-start">
+          <div className="flex items-center justify-start gap-2">
             <div className="hidden sm:block w-full max-w-xs">
               <input
                 value={search}
@@ -56,8 +55,7 @@ const Header = () => {
             </button>
           </div>
 
-          {/* Right: Actions */}
-          <div className="flex items-center gap-4 justify-end text-sm">
+          <div className="flex items-center justify-end gap-4 text-sm">
             {/* Language button */}
             <button
               onClick={() => {
@@ -69,8 +67,18 @@ const Header = () => {
               {i18n.language === "fa" ? "EN" : "FA"}
             </button>
 
-            <button className="hover:underline">{t("nav.cart")}</button>
-            <button className="hover:underline">{t("nav.login")}</button>
+            <button
+              type="button"
+              className="inline-flex h-9 w-[6.5rem] shrink-0 items-center justify-center text-sm hover:underline"
+            >
+              {t("nav.cart")}
+            </button>
+            <button
+              type="button"
+              className="inline-flex h-9 w-[4.5rem] shrink-0 items-center justify-center text-sm hover:underline"
+            >
+              {t("nav.login")}
+            </button>
           </div>
         </div>
 

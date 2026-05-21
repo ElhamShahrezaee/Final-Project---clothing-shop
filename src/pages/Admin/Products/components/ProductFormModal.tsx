@@ -83,7 +83,7 @@ export default function ProductFormModal({
     setValues((prev) => ({ ...prev, [key]: value }));
   };
 
-  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageSelect = (e: ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files ?? []);
     if (files.length === 0) return;
     setNewImageFiles((prev) => [...prev, ...files]);

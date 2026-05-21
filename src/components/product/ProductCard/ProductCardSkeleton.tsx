@@ -2,13 +2,16 @@ import Skeleton from "../../common/Skeleton/Skeleton";
 
 export default function ProductCardSkeleton() {
   return (
-    <div>
-      <Skeleton className="h-[380px] w-full" />
-      <div className="mt-3 space-y-2">
-        <Skeleton className="h-4 w-2/3" />
-        <Skeleton className="h-4 w-24" />
+    <div className="pb-[40px]">
+      <Skeleton className="aspect-square w-full" />
+      <div className="space-y-1.5 px-[40px] pt-[30px]">
+        <div className="flex justify-between gap-2">
+          <Skeleton className="h-4 w-3/5" />
+          <Skeleton className="h-3 w-10" />
+        </div>
+        <Skeleton className="h-3 w-2/5" />
+        <Skeleton className="h-4 w-20" />
       </div>
     </div>
   );
 }
-
