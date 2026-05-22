@@ -4,7 +4,7 @@ import { getProducts } from "../api/getProducts";
 export function useProductsQuery() {
   return useQuery({
     queryKey: ["products"],
-    queryFn: getProducts,
+    queryFn: () => getProducts(),
   });
 }
 

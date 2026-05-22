@@ -7,3 +7,9 @@ export type Product = {
   rating: number;
   category: string;
 };
+
+export type ProductDetail = Product & {
+  description: string;
+  stock: number;
+  numReviews: number;
+};

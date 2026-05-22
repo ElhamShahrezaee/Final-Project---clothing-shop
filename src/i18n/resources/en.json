@@ -21,6 +21,23 @@
     "title": "Products",
     "searchResultFor": "Search results for:"
   },
+  "productDetails": {
+    "notFound": "Product not found",
+    "loadError": "Failed to load product",
+    "category": "Category",
+    "brand": "Brand",
+    "addToCart": "Add to cart",
+    "stock": "Stock",
+    "rating": "Rating",
+    "descriptionTitle": "Product description",
+    "reviewsTitle": "Reviews",
+    "similarTitle": "Similar products",
+    "noSimilar": "No similar products found.",
+    "reviewUser": "Site user",
+    "reviewDate": "Date 2026/1/1",
+    "reviewBody": "This is a great product. I recommend buying it!",
+    "noReviews": "No reviews yet."
+  },
   "errors": {
     "notFound": "404 - Page Not Found"
   }

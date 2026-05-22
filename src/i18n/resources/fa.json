@@ -21,6 +21,23 @@
     "title": "صفحه محصولات",
     "searchResultFor": "نتیجه جستجو برای:"
   },
+  "productDetails": {
+    "notFound": "محصول یافت نشد",
+    "loadError": "خطا در بارگذاری محصول",
+    "category": "دسته‌بندی",
+    "brand": "برند",
+    "addToCart": "اضافه کردن به سبد خرید",
+    "stock": "موجودی",
+    "rating": "امتیاز",
+    "descriptionTitle": "توضیحات محصول",
+    "reviewsTitle": "نظرات",
+    "similarTitle": "محصولات مشابه",
+    "noSimilar": "محصول مشابهی یافت نشد.",
+    "reviewUser": "کاربر سایت",
+    "reviewDate": "تاریخ 05/1/1",
+    "reviewBody": "خیلی محصول خوبیه، پیشنهاد میکنم بخریدش!",
+    "noReviews": "هنوز نظری ثبت نشده است."
+  },
   "errors": {
     "notFound": "۴۰۴ - صفحه پیدا نشد"
   }
