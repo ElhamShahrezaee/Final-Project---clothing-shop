@@ -6,7 +6,7 @@
     "home": "خانه",
     "products": "محصولات",
     "cart": "سبد خرید",
-    "login": "ورود"
+    "login": "ورود/ثبت نام"
   },
   "search": {
     "placeholder": "جستجو...",
@@ -15,7 +15,17 @@
   "home": {
     "heroTitle": "پاییز / زمستان",
     "heroSubtitle": "کالکشن لوکس ۲۰۲۶",
-    "featuredTitle": "منتخب‌ها"
+    "featuredTitle": "محصولات منتخب",
+    "viewAllProducts": "مشاهده سایر محصولات",
+    "categoriesTitle": "دسته‌بندی‌ها",
+    "newCollectionTitle": "محصولات جدید",
+    "newCollectionSearch": "جدید",
+    "categories": {
+      "shoes": "کفش",
+      "bags": "کیف",
+      "clothes": "لباس",
+      "accessories": "اکسسوری"
+    }
   },
   "products": {
     "title": "صفحه محصولات",
@@ -40,5 +50,174 @@
   },
   "errors": {
     "notFound": "۴۰۴ - صفحه پیدا نشد"
+  },
+  "admin": {
+    "panelTitle": "پنل ادمین",
+    "logout": "خروج",
+    "languageToggle": "تغییر زبان",
+    "nav": {
+      "dashboard": "داشبورد",
+      "products": "محصولات",
+      "inventory": "موجودی/قیمت",
+      "orders": "سفارشات"
+    },
+    "login": {
+      "title": "ورود به پنل ادمین",
+      "subtitle": "با حساب ادمین وارد شوید",
+      "email": "ایمیل",
+      "password": "رمز عبور",
+      "submit": "ورود",
+      "submitting": "در حال ورود...",
+      "error": "خطا در ورود",
+      "hidePassword": "مخفی کردن رمز عبور",
+      "showPassword": "نمایش رمز عبور"
+    },
+    "dashboard": {
+      "title": "داشبورد",
+      "subtitle": "نمای کلی فعالیت فروشگاه",
+      "weeklyRevenue": "درآمد هفتگی",
+      "sampleData": "داده نمونه",
+      "last7Days": "۷ روز گذشته"
+    },
+    "common": {
+      "cancel": "انصراف",
+      "save": "ذخیره",
+      "saving": "در حال ذخیره...",
+      "delete": "حذف",
+      "deleting": "در حال حذف...",
+      "edit": "ویرایش",
+      "all": "همه",
+      "active": "فعال",
+      "inactive": "غیرفعال",
+      "noImage": "بدون تصویر",
+      "prev": "قبلی",
+      "next": "بعدی",
+      "perPage": "تعداد در صفحه",
+      "clearFilters": "پاک کردن فیلترها",
+      "clearFilter": "پاک کردن فیلتر",
+      "actions": "عملیات",
+      "removeImage": "حذف تصویر"
+    },
+    "products": {
+      "title": "محصولات",
+      "description": "مدیریت محصولات فروشگاه",
+      "addNew": "اضافه کردن محصول جدید",
+      "loadError": "خطا در بارگذاری محصولات",
+      "empty": "محصولی یافت نشد.",
+      "saveError": "خطا در ذخیره محصول",
+      "deleteError": "خطا در حذف محصول",
+      "changeStock": "تغییر موجودی",
+      "changePrice": "تغییر قیمت",
+      "table": {
+        "image": "تصویر",
+        "name": "نام",
+        "category": "دسته‌بندی",
+        "brand": "برند",
+        "price": "قیمت",
+        "stock": "موجودی",
+        "rating": "امتیاز",
+        "numReviews": "تعداد نظرات",
+        "status": "وضعیت"
+      },
+      "filters": {
+        "search": "جستجو",
+        "searchPlaceholder": "نام محصول...",
+        "category": "دسته‌بندی",
+        "categoryPlaceholder": "مثلاً تیشرت یا هودی",
+        "status": "وضعیت"
+      },
+      "pagination": {
+        "summary": "نمایش {{from}} تا {{to}} از {{total}} محصول"
+      },
+      "form": {
+        "createTitle": "اضافه کردن محصول جدید",
+        "editTitle": "ویرایش محصول",
+        "createSubmit": "اضافه کردن محصول",
+        "editSubmit": "ویرایش محصول",
+        "name": "نام",
+        "description": "توضیحات",
+        "category": "دسته‌بندی",
+        "brand": "برند",
+        "price": "قیمت",
+        "stock": "موجودی",
+        "rating": "امتیاز",
+        "numReviews": "تعداد نظرات",
+        "status": "وضعیت",
+        "images": "تصاویر",
+        "imagesHint": "می‌توانید یک یا چند تصویر انتخاب کنید (حداقل یک تصویر برای ذخیره لازم است)."
+      },
+      "delete": {
+        "title": "حذف محصول",
+        "confirm": "آیا می‌خواهید این محصول را حذف کنید؟"
+      }
+    },
+    "inventory": {
+      "title": "موجودی / قیمت",
+      "description": "مدیریت موجودی و قیمت محصولات",
+      "stockUpdateError": "خطا در بروزرسانی موجودی",
+      "priceUpdateError": "خطا در بروزرسانی قیمت",
+      "stockModal": {
+        "title": "تغییر موجودی",
+        "help": "موجودی جدید محصول را وارد کنید.",
+        "currentStock": "موجودی فعلی:",
+        "newStock": "موجودی جدید"
+      },
+      "priceModal": {
+        "title": "تغییر قیمت",
+        "help": "قیمت جدید محصول را وارد کنید.",
+        "currentPrice": "قیمت فعلی:",
+        "newPrice": "قیمت جدید"
+      }
+    },
+    "orders": {
+      "title": "سفارشات",
+      "description": "مدیریت سفارش‌های مشتریان",
+      "loadError": "خطا در بارگذاری سفارشات",
+      "empty": "سفارشی یافت نشد.",
+      "statusFilter": "وضعیت سفارش",
+      "paid": "پرداخت شده",
+      "unpaid": "پرداخت نشده",
+      "itemsLine": "{{qty}}× {{name}}",
+      "itemsMore": "{{line}} و {{count}} مورد دیگر",
+      "table": {
+        "customer": "مشتری",
+        "phone": "تلفن",
+        "address": "آدرس",
+        "products": "محصولات",
+        "amount": "مبلغ",
+        "status": "وضعیت",
+        "payment": "پرداخت"
+      },
+      "pagination": {
+        "summary": "نمایش {{from}} تا {{to}} از {{total}} سفارش"
+      },
+      "status": {
+        "pending": "در انتظار تایید",
+        "confirmed": "تایید شده",
+        "shipping": "در حال ارسال",
+        "delivered": "تحویل داده شده",
+        "cancelled": "لغو شده"
+      }
+    },
+    "validation": {
+      "nameRequired": "نام محصول الزامی است.",
+      "descriptionRequired": "توضیحات محصول الزامی است.",
+      "categoryRequired": "دسته‌بندی الزامی است.",
+      "brandRequired": "برند الزامی است.",
+      "priceInvalid": "قیمت باید عددی بزرگ‌تر یا مساوی صفر باشد.",
+      "stockInvalid": "موجودی باید عدد صحیح بزرگ‌تر یا مساوی صفر باشد.",
+      "ratingInvalid": "امتیاز باید بین ۰ تا ۵ باشد.",
+      "numReviewsInvalid": "تعداد نظرات باید عدد صحیح بزرگ‌تر یا مساوی صفر باشد.",
+      "imagesRequired": "حداقل یک عکس الزامی است.",
+      "stockRequired": "موجودی را وارد کنید.",
+      "priceRequired": "قیمت را وارد کنید."
+    },
+    "apiErrors": {
+      "fetchProducts": "خطا در دریافت محصولات",
+      "createProduct": "خطا در ایجاد محصول",
+      "updateProduct": "خطا در بروزرسانی محصول",
+      "deleteProduct": "خطا در حذف محصول",
+      "fetchOrders": "خطا در دریافت سفارشات"
+    }
   }
 }

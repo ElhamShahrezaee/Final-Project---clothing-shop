@@ -1,29 +1,38 @@
-import ProductList from "../../components/product/ProductList/ProductList";
-import { useTranslation } from "react-i18next";
 import { useAppLocale } from "../../hooks/useAppLocale";
+import HomeCategories from "./components/HomeCategories";
+import HomeFeaturedProducts from "./components/HomeFeaturedProducts";
+import HomeNewCollectionBanner from "./components/HomeNewCollectionBanner";
+import { FULL_BLEED_MEDIA_HEIGHT } from "../../styles/mediaHeights";
+
+const LANDING_VIDEO_SRC = "/videos/landing1.mp4";
 
 const Home = () => {
-  const { t } = useTranslation();
   const { dir, textAlign } = useAppLocale();
 
   return (
-    <div dir={dir} className={`space-y-10 ${textAlign}`}>
-      <section className="mx-auto flex h-[70vh] max-w-6xl items-end bg-black p-10 text-white">
-        <div>
-          <h1 className="text-5xl font-light tracking-wide">{t("home.heroTitle")}</h1>
-          <p className="mt-3 text-gray-300">{t("home.heroSubtitle")}</p>
-        </div>
+    <div dir={dir} className={textAlign}>
+      <section
+        className={`relative w-full overflow-hidden ${FULL_BLEED_MEDIA_HEIGHT}`}
+        aria-hidden
+      >
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          disablePictureInPicture
+          controls={false}
+          preload="auto"
+          className="pointer-events-none h-full w-full object-cover"
+          src={LANDING_VIDEO_SRC}
+        />
       </section>
 
-      <section className="w-full">
-        <h2
-          className={`mb-4 px-4 text-2xl font-light tracking-wide lg:px-[50px] ${textAlign}`}
-        >
-          {t("home.featuredTitle")}
-        </h2>
+      <HomeCategories />
 
-        <ProductList />
-      </section>
+      <HomeNewCollectionBanner />
+
+      <HomeFeaturedProducts />
     </div>
   );
 };

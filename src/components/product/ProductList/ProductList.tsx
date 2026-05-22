@@ -1,32 +1,39 @@
-import ProductCard from "../ProductCard/ProductCard";
-import ProductCardSkeleton from "../ProductCard/ProductCardSkeleton";
-import { useProductsQuery } from "../../../features/products/queries/useProductsQuery";
+import ProductGrid, {
+  ProductGridSkeleton,
+  productGridWrapperClass,
+} from "../ProductGrid/ProductGrid";
+import { useStoreProductsQuery } from "../../../features/products/queries/useStoreProductsQuery";
 import { useAppLocale } from "../../../hooks/useAppLocale";
 
-const normalize = (s: string) => s.trim().toLowerCase();
+type ProductListProps = {
+  search?: string | null;
+  category?: string | null;
+  page?: number;
+  limit?: number;
+};
 
-const wrapperClass = "px-4 lg:px-[50px]";
-const gridClass =
-  "grid grid-cols-2 gap-x-1 gap-y-[50px] sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
-
-const ProductList = ({ search }: { search?: string | null }) => {
+const ProductList = ({
+  search,
+  category,
+  page = 1,
+  limit = 12,
+}: ProductListProps) => {
   const { isFa, dir, textAlign } = useAppLocale();
-  const { data, isLoading, isError, error } = useProductsQuery();
+  const { data, isLoading, isError, error } = useStoreProductsQuery({
+    page,
+    limit,
+    search,
+    category,
+  });
 
   if (isLoading) {
-    return (
-      <div dir={dir} className={`${wrapperClass} ${gridClass}`}>
-        {Array.from({ length: 8 }).map((_, i) => (
-          <ProductCardSkeleton key={i} />
-        ))}
-      </div>
-    );
+    return <ProductGridSkeleton count={limit} />;
   }
 
   if (isError) {
     return (
       <div
-        className={`${wrapperClass} text-sm text-red-600 ${textAlign}`}
+        className={`${productGridWrapperClass} text-sm text-red-600 ${textAlign}`}
         dir={dir}
         role="alert"
       >
@@ -39,30 +46,19 @@ const ProductList = ({ search }: { search?: string | null }) => {
     );
   }
 
-  const products = data ?? [];
-  const q = search ? normalize(search) : "";
-  const filtered = q
-    ? products.filter(
-        (p) =>
-          normalize(p.name).includes(q) ||
-          normalize(p.brand).includes(q) ||
-          normalize(p.category).includes(q),
-      )
-    : products;
+  const products = data?.products ?? [];
 
-  if (filtered.length === 0) {
+  if (products.length === 0) {
     return (
-      <p className={`${wrapperClass} text-sm text-gray-500 ${textAlign}`} dir={dir}>
+      <p className={`${productGridWrapperClass} text-sm text-gray-500 ${textAlign}`} dir={dir}>
         {isFa ? "محصولی یافت نشد." : "No products found."}
       </p>
     );
   }
 
   return (
-    <div dir={dir} className={`${wrapperClass} ${gridClass}`}>
-      {filtered.map((product) => (
-        <ProductCard key={product.id} product={product} />
-      ))}
+    <div dir={dir} className={productGridWrapperClass}>
+      <ProductGrid products={products} />
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import type { AdminProduct } from "../../../../features/admin/products/types";
 import { formatPrice } from "../../../../features/admin/products/utils/formatPrice";
 import { useAdminLocale } from "../../../../hooks/useAdminLocale";
@@ -19,6 +20,7 @@ export default function ChangePriceModal({
   onSave,
   onCancel,
 }: ChangePriceModalProps) {
+  const { t } = useTranslation();
   const { isFa, dir, textAlign } = useAdminLocale();
   const imageUrl = product.images[0];
   const [priceInput, setPriceInput] = useState(String(product.price));
@@ -32,13 +34,13 @@ export default function ChangePriceModal({
   const handleSave = () => {
     const trimmed = priceInput.trim();
     if (trimmed === "") {
-      setValidationError("قیمت را وارد کنید.");
+      setValidationError(t("admin.validation.priceRequired"));
       return;
     }
 
     const price = Number(trimmed);
     if (!Number.isFinite(price) || price < 0) {
-      setValidationError("قیمت باید عددی بزرگ‌تر یا مساوی صفر باشد.");
+      setValidationError(t("admin.validation.priceInvalid"));
       return;
     }
 
@@ -63,9 +65,9 @@ export default function ChangePriceModal({
         onClick={(e) => e.stopPropagation()}
       >
         <h2 id="change-price-title" className="text-lg font-semibold text-gray-900">
-          تغییر قیمت
+          {t("admin.inventory.priceModal.title")}
         </h2>
-        <p className="mt-2 text-sm text-gray-600">قیمت جدید محصول را وارد کنید.</p>
+        <p className="mt-2 text-sm text-gray-600">{t("admin.inventory.priceModal.help")}</p>
 
         <div className="mt-5 flex items-center gap-4 rounded-lg border border-gray-200 bg-gray-50 p-4">
           {imageUrl ? (
@@ -76,13 +78,13 @@ export default function ChangePriceModal({
             />
           ) : (
             <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-lg bg-gray-200 text-xs text-gray-500">
-              بدون تصویر
+              {t("admin.common.noImage")}
             </div>
           )}
           <div className="min-w-0 flex-1">
             <p className="truncate font-medium text-gray-900">{product.name}</p>
             <p className="mt-1 text-sm text-gray-600">
-              قیمت فعلی:{" "}
+              {t("admin.inventory.priceModal.currentPrice")}{" "}
               <span className="font-medium text-gray-900">
                 {formatPrice(product.price, isFa)}
               </span>
@@ -95,7 +97,7 @@ export default function ChangePriceModal({
             htmlFor="product-price"
             className="mb-1.5 block text-sm font-medium text-gray-700"
           >
-            قیمت جدید
+            {t("admin.inventory.priceModal.newPrice")}
           </label>
           <input
             id="product-price"
@@ -125,7 +127,7 @@ export default function ChangePriceModal({
             disabled={isSaving}
             className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            انصراف
+            {t("admin.common.cancel")}
           </button>
           <button
             type="button"
@@ -136,10 +138,10 @@ export default function ChangePriceModal({
             {isSaving ? (
               <>
                 <Spinner size="sm" className="border-white/40 border-t-white" />
-                <span>در حال ذخیره...</span>
+                <span>{t("admin.common.saving")}</span>
               </>
             ) : (
-              "ذخیره"
+              t("admin.common.save")
             )}
           </button>
         </div>

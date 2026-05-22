@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import type { AdminProduct } from "../../../features/admin/products/types";
 import type { AdminProductFormValues } from "../../../features/admin/products/types/productForm";
 import { useCreateAdminProductMutation } from "../../../features/admin/products/queries/useCreateAdminProductMutation";
@@ -14,6 +15,7 @@ import ProductPagination from "./components/ProductPagination";
 import ProductTable from "./components/ProductTable";
 
 export default function AdminProducts() {
+  const { t } = useTranslation();
   const { textAlign } = useAdminLocale();
   const [productToDelete, setProductToDelete] = useState<AdminProduct | null>(null);
   const [deleteError, setDeleteError] = useState<string | null>(null);
@@ -94,7 +96,7 @@ export default function AdminProducts() {
       setFormMode(null);
       setProductToEdit(null);
     } catch (err) {
-      setFormError(err instanceof Error ? err.message : "خطا در ذخیره محصول");
+      setFormError(err instanceof Error ? err.message : t("admin.products.saveError"));
     }
   };
 
@@ -123,15 +125,15 @@ export default function AdminProducts() {
         setPage(page - 1);
       }
     } catch (err) {
-      setDeleteError(err instanceof Error ? err.message : "خطا در حذف محصول");
+      setDeleteError(err instanceof Error ? err.message : t("admin.products.deleteError"));
     }
   };
 
   return (
     <>
       <AdminListPage
-        title="محصولات"
-        description="مدیریت محصولات فروشگاه"
+        title={t("admin.products.title")}
+        description={t("admin.products.description")}
         textAlign={textAlign}
         filters={
           <div className="space-y-4">
@@ -140,7 +142,7 @@ export default function AdminProducts() {
               onClick={handleAddClick}
               className="rounded-lg bg-gray-900 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-gray-800"
             >
-              اضافه کردن محصول جدید
+              {t("admin.products.addNew")}
             </button>
             <ProductFilters
               search={searchInput}

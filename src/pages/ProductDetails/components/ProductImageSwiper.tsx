@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useAppLocale } from "../../../hooks/useAppLocale";
+import { FULL_BLEED_MEDIA_HEIGHT } from "../../../styles/mediaHeights";
 
 const TRANSITION_MS = 600;
 
@@ -119,7 +120,9 @@ export default function ProductImageSwiper({ images, alt }: ProductImageSwiperPr
         dir="ltr"
         className="relative w-full border-b bg-gray-50"
       >
-        <div className="flex h-[50vh] min-h-[280px] w-full items-center justify-center text-sm text-gray-400 md:h-[60vh]">
+        <div
+          className={`flex w-full items-center justify-center text-sm text-gray-400 ${FULL_BLEED_MEDIA_HEIGHT}`}
+        >
           {isFa ? "بدون تصویر" : "No image"}
         </div>
       </section>
@@ -130,7 +133,7 @@ export default function ProductImageSwiper({ images, alt }: ProductImageSwiperPr
     <section dir="ltr" className="relative w-full border-b bg-gray-50">
       <div
         ref={viewportRef}
-        className="relative h-[50vh] min-h-[280px] w-full overflow-hidden md:h-[60vh]"
+        className={`relative w-full overflow-hidden ${FULL_BLEED_MEDIA_HEIGHT}`}
       >
         <div
           className="flex h-full will-change-transform"
@@ -145,8 +148,8 @@ export default function ProductImageSwiper({ images, alt }: ProductImageSwiperPr
           {slides.map((src, slideIndex) => (
             <div
               key={`${src}-${slideIndex}`}
-              className="flex h-full shrink-0 grow-0 items-center justify-center px-4"
-              style={{ width: slideWidth > 0 ? slideWidth : "100%" }}
+              className="flex h-full min-w-full shrink-0 grow-0 items-center justify-center bg-gray-50"
+              style={slideWidth > 0 ? { width: slideWidth } : undefined}
             >
               <img
                 src={src}

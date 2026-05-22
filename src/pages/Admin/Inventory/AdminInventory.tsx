@@ -1,4 +1,5 @@
 ﻿import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import type { AdminProduct } from "../../../features/admin/products/types";
 import { useUpdateAdminProductMutation } from "../../../features/admin/products/queries/useUpdateAdminProductMutation";
 import { useAdminLocale } from "../../../hooks/useAdminLocale";
@@ -11,6 +12,7 @@ import ChangePriceModal from "./components/ChangePriceModal";
 import ChangeStockModal from "./components/ChangeStockModal";
 
 export default function AdminInventory() {
+  const { t } = useTranslation();
   const { textAlign } = useAdminLocale();
   const [productForStock, setProductForStock] = useState<AdminProduct | null>(null);
   const [productForPrice, setProductForPrice] = useState<AdminProduct | null>(null);
@@ -75,7 +77,9 @@ export default function AdminInventory() {
       });
       setProductForStock(null);
     } catch (err) {
-      setStockSaveError(err instanceof Error ? err.message : "خطا در بروزرسانی موجودی");
+      setStockSaveError(
+        err instanceof Error ? err.message : t("admin.inventory.stockUpdateError"),
+      );
     }
   };
 
@@ -95,15 +99,17 @@ export default function AdminInventory() {
       });
       setProductForPrice(null);
     } catch (err) {
-      setPriceSaveError(err instanceof Error ? err.message : "خطا در بروزرسانی قیمت");
+      setPriceSaveError(
+        err instanceof Error ? err.message : t("admin.inventory.priceUpdateError"),
+      );
     }
   };
 
   return (
     <>
       <AdminListPage
-        title="موجودی / قیمت"
-        description="مدیریت موجودی و قیمت محصولات"
+        title={t("admin.inventory.title")}
+        description={t("admin.inventory.description")}
         textAlign={textAlign}
         filters={
           <ProductFilters

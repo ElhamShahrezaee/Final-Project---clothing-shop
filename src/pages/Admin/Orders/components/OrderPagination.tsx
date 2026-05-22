@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import type { OrderPageSize } from "../../../../features/admin/orders/types";
 
 const PAGE_SIZE_OPTIONS: OrderPageSize[] = [10, 20, 50, 100];
@@ -19,19 +20,20 @@ export default function OrderPagination({
   onPageChange,
   onLimitChange,
 }: OrderPaginationProps) {
+  const { t } = useTranslation();
   const from = total === 0 ? 0 : (page - 1) * limit + 1;
   const to = Math.min(page * limit, total);
 
   return (
     <div className="flex flex-wrap items-center justify-between gap-3">
       <p className="text-sm text-gray-600">
-        نمایش {from} تا {to} از {total} سفارش
+        {t("admin.orders.pagination.summary", { from, to, total })}
       </p>
 
       <div className="flex flex-wrap items-center gap-3">
         <div className="flex items-center gap-2">
           <label htmlFor="page-size" className="text-sm text-gray-600">
-            تعداد در صفحه
+            {t("admin.common.perPage")}
           </label>
           <select
             id="page-size"
@@ -54,7 +56,7 @@ export default function OrderPagination({
             onClick={() => onPageChange(page - 1)}
             className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm disabled:cursor-not-allowed disabled:opacity-50 hover:bg-gray-100"
           >
-            قبلی
+            {t("admin.common.prev")}
           </button>
           <span className="min-w-[4rem] text-center text-sm text-gray-700">
             {page} / {totalPages}
@@ -65,7 +67,7 @@ export default function OrderPagination({
             onClick={() => onPageChange(page + 1)}
             className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm disabled:cursor-not-allowed disabled:opacity-50 hover:bg-gray-100"
           >
-            بعدی
+            {t("admin.common.next")}
           </button>
         </div>
       </div>

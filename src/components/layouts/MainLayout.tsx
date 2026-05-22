@@ -9,11 +9,11 @@ const MainLayout = () => {
   return (
     <div
       dir={dir}
-      className={`flex min-h-screen flex-col bg-white text-gray-900 ${textAlign}`}
+      className={`flex min-h-screen max-w-full flex-col overflow-x-hidden bg-white text-gray-900 ${textAlign}`}
     >
       <Header />
 
-      <main className="w-full flex-1 py-6">
+      <main className="w-full flex-1 overflow-x-hidden pb-0 pt-[4.75rem] sm:pt-[6.5rem]">
         <Outlet />
       </main>
 

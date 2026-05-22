@@ -1,4 +1,5 @@
 import axios from "axios";
+import i18n from "../../../../i18n";
 import { apiClient } from "../../../../lib/api/client";
 import type { ApiResponse } from "../../../../lib/api/types";
 import { resolveProductImageUrl } from "../../products/utils/resolveProductImageUrl";
@@ -77,7 +78,7 @@ export async function getAdminOrders(
     );
 
     if (!data.success || !Array.isArray(data.data)) {
-      throw new Error(data.message || "خطا در دریافت سفارشات");
+      throw new Error(data.message || i18n.t("admin.apiErrors.fetchOrders"));
     }
 
     return {
@@ -93,7 +94,7 @@ export async function getAdminOrders(
     if (axios.isAxiosError(error)) {
       const message =
         (error.response?.data as ApiResponse<unknown> | undefined)?.message ??
-        "خطا در دریافت سفارشات";
+        i18n.t("admin.apiErrors.fetchOrders");
       throw new Error(message);
     }
     throw error;

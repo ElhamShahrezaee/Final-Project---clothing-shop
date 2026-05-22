@@ -1,7 +1,8 @@
+import { useTranslation } from "react-i18next";
 import type { AdminOrder } from "../../../../features/admin/orders/types";
 import {
+  getOrderStatusLabel,
   getOrderTotal,
-  ORDER_STATUS_LABELS,
 } from "../../../../features/admin/orders/utils/orderLabels";
 import { formatPrice } from "../../../../features/admin/products/utils/formatPrice";
 import { useAdminLocale } from "../../../../hooks/useAdminLocale";
@@ -25,21 +26,22 @@ const STATUS_STYLES: Record<string, string> = {
   cancelled: "bg-gray-100 text-gray-600",
 };
 
-function formatItemsSummary(order: AdminOrder): string {
-  if (order.orderItems.length === 0) return "—";
-  const first = order.orderItems[0];
-  const rest = order.orderItems.length - 1;
-  const line = `${first.quantity}× ${first.name}`;
-  return rest > 0 ? `${line} و ${rest} مورد دیگر` : line;
-}
-
 export default function OrderTable({
   orders,
   isLoading,
   isError,
   errorMessage,
 }: OrderTableProps) {
+  const { t } = useTranslation();
   const { isFa, textAlign } = useAdminLocale();
+
+  const formatItemsSummary = (order: AdminOrder): string => {
+    if (order.orderItems.length === 0) return "—";
+    const first = order.orderItems[0];
+    const rest = order.orderItems.length - 1;
+    const line = t("admin.orders.itemsLine", { qty: first.quantity, name: first.name });
+    return rest > 0 ? t("admin.orders.itemsMore", { line, count: rest }) : line;
+  };
 
   if (isLoading) {
     return (
@@ -52,7 +54,7 @@ export default function OrderTable({
   if (isError) {
     return (
       <p className="m-4 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700" role="alert">
-        {errorMessage ?? "خطا در بارگذاری سفارشات"}
+        {errorMessage ?? t("admin.orders.loadError")}
       </p>
     );
   }
@@ -60,7 +62,7 @@ export default function OrderTable({
   if (orders.length === 0) {
     return (
       <p className="m-4 rounded-lg border border-dashed border-gray-300 px-4 py-10 text-center text-sm text-gray-500">
-        سفارشی یافت نشد.
+        {t("admin.orders.empty")}
       </p>
     );
   }
@@ -70,13 +72,13 @@ export default function OrderTable({
       <table className={`w-full min-w-[880px] ${textAlign}`}>
         <thead className="sticky top-0 z-10 border-b border-gray-200 bg-gray-50">
           <tr>
-            <th className={thClass}>مشتری</th>
-            <th className={thClass}>تلفن</th>
-            <th className={thClass}>آدرس</th>
-            <th className={thClass}>محصولات</th>
-            <th className={thClass}>مبلغ</th>
-            <th className={thClass}>وضعیت</th>
-            <th className={thClass}>پرداخت</th>
+            <th className={thClass}>{t("admin.orders.table.customer")}</th>
+            <th className={thClass}>{t("admin.orders.table.phone")}</th>
+            <th className={thClass}>{t("admin.orders.table.address")}</th>
+            <th className={thClass}>{t("admin.orders.table.products")}</th>
+            <th className={thClass}>{t("admin.orders.table.amount")}</th>
+            <th className={thClass}>{t("admin.orders.table.status")}</th>
+            <th className={thClass}>{t("admin.orders.table.payment")}</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-100">
@@ -105,7 +107,7 @@ export default function OrderTable({
                       STATUS_STYLES[order.status] ?? "bg-gray-100 text-gray-600",
                     ].join(" ")}
                   >
-                    {ORDER_STATUS_LABELS[order.status]}
+                    {getOrderStatusLabel(order.status, t)}
                   </span>
                 </td>
                 <td className={tdClass}>
@@ -117,7 +119,7 @@ export default function OrderTable({
                         : "bg-red-100 text-red-800",
                     ].join(" ")}
                   >
-                    {order.isPaid ? "پرداخت شده" : "پرداخت نشده"}
+                    {order.isPaid ? t("admin.orders.paid") : t("admin.orders.unpaid")}
                   </span>
                 </td>
               </tr>

@@ -7,11 +7,12 @@ import CollapsibleSection from "./components/CollapsibleSection";
 import ProductImageSwiper from "./components/ProductImageSwiper";
 import ProductInfoBar from "./components/ProductInfoBar";
 import SimilarProductsRow from "./components/SimilarProductsRow";
+import { FULL_BLEED_MEDIA_HEIGHT } from "../../styles/mediaHeights";
 
 function ProductDetailsSkeleton() {
   return (
     <div className="animate-pulse">
-      <div className="h-[50vh] min-h-[280px] border-b bg-gray-200 md:h-[60vh]" />
+      <div className={`border-b bg-gray-200 ${FULL_BLEED_MEDIA_HEIGHT}`} />
       <div className="grid grid-cols-2 gap-8 px-8 py-8">
         <div className="space-y-4">
           <div className="h-4 w-24 bg-gray-200" />

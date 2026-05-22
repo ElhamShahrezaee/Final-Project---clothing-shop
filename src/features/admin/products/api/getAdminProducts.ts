@@ -1,4 +1,5 @@
 import axios from "axios";
+import i18n from "../../../../i18n";
 import { apiClient } from "../../../../lib/api/client";
 import type { ApiResponse } from "../../../../lib/api/types";
 import type {
@@ -78,7 +79,7 @@ export async function getAdminProducts(
     });
 
     if (!data.success || !Array.isArray(data.data)) {
-      throw new Error(data.message || "خطا در دریافت محصولات");
+      throw new Error(data.message || i18n.t("admin.apiErrors.fetchProducts"));
     }
 
     return {
@@ -94,7 +95,7 @@ export async function getAdminProducts(
     if (axios.isAxiosError(error)) {
       const message =
         (error.response?.data as ApiResponse<unknown> | undefined)?.message ??
-        "خطا در دریافت محصولات";
+        i18n.t("admin.apiErrors.fetchProducts");
       throw new Error(message);
     }
     throw error;

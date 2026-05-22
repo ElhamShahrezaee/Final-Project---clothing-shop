@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import type {
   OrderPageSize,
   OrderStatusFilter,
@@ -11,6 +12,7 @@ import OrderPagination from "./components/OrderPagination";
 import OrderTable from "./components/OrderTable";
 
 export default function AdminOrders() {
+  const { t } = useTranslation();
   const { textAlign } = useAdminLocale();
 
   const [page, setPage] = useState(1);
@@ -52,8 +54,8 @@ export default function AdminOrders() {
 
   return (
     <AdminListPage
-      title="سفارشات"
-      description="مدیریت سفارش‌های مشتریان"
+      title={t("admin.orders.title")}
+      description={t("admin.orders.description")}
       textAlign={textAlign}
       filters={
         <OrderFilters

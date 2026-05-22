@@ -1,4 +1,5 @@
-﻿import type { AdminProduct } from "../../../../features/admin/products/types";
+﻿import { useTranslation } from "react-i18next";
+import type { AdminProduct } from "../../../../features/admin/products/types";
 import { formatPrice } from "../../../../features/admin/products/utils/formatPrice";
 import { useAdminLocale } from "../../../../hooks/useAdminLocale";
 import Spinner from "../../../../components/common/Spinner/Spinner";
@@ -31,6 +32,7 @@ export default function ProductTable({
   onChangeStock,
   onChangePrice,
 }: ProductTableProps) {
+  const { t } = useTranslation();
   const { isFa, textAlign } = useAdminLocale();
 
   if (isLoading) {
@@ -44,7 +46,7 @@ export default function ProductTable({
   if (isError) {
     return (
       <p className="m-4 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700" role="alert">
-        {errorMessage ?? "خطا در بارگذاری محصولات"}
+        {errorMessage ?? t("admin.products.loadError")}
       </p>
     );
   }
@@ -52,7 +54,7 @@ export default function ProductTable({
   if (products.length === 0) {
     return (
       <p className="m-4 rounded-lg border border-dashed border-gray-300 px-4 py-10 text-center text-sm text-gray-500">
-        محصولی یافت نشد.
+        {t("admin.products.empty")}
       </p>
     );
   }
@@ -62,16 +64,16 @@ export default function ProductTable({
       <table className={`w-full min-w-[960px] ${textAlign}`}>
         <thead className="sticky top-0 z-10 border-b border-gray-200 bg-gray-50">
           <tr>
-            <th className={thClass}>تصویر</th>
-            <th className={thClass}>نام</th>
-            <th className={thClass}>دسته‌بندی</th>
-            <th className={thClass}>برند</th>
-            <th className={thClass}>قیمت</th>
-            <th className={thClass}>موجودی</th>
-            <th className={thClass}>امتیاز</th>
-            <th className={thClass}>تعداد نظرات</th>
-            <th className={thClass}>وضعیت</th>
-            <th className={thClass}>عملیات</th>
+            <th className={thClass}>{t("admin.products.table.image")}</th>
+            <th className={thClass}>{t("admin.products.table.name")}</th>
+            <th className={thClass}>{t("admin.products.table.category")}</th>
+            <th className={thClass}>{t("admin.products.table.brand")}</th>
+            <th className={thClass}>{t("admin.products.table.price")}</th>
+            <th className={thClass}>{t("admin.products.table.stock")}</th>
+            <th className={thClass}>{t("admin.products.table.rating")}</th>
+            <th className={thClass}>{t("admin.products.table.numReviews")}</th>
+            <th className={thClass}>{t("admin.products.table.status")}</th>
+            <th className={thClass}>{t("admin.common.actions")}</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-100">
@@ -108,7 +110,7 @@ export default function ProductTable({
                       : "bg-gray-100 text-gray-600",
                   ].join(" ")}
                 >
-                  {product.isActive ? "فعال" : "غیرفعال"}
+                  {product.isActive ? t("admin.common.active") : t("admin.common.inactive")}
                 </span>
               </td>
               <td className={tdClass}>
@@ -120,14 +122,14 @@ export default function ProductTable({
                         onClick={() => onChangeStock?.(product)}
                         className="rounded-md border border-gray-300 px-2.5 py-1 text-xs text-gray-700 hover:bg-gray-100"
                       >
-                        تغییر موجودی
+                        {t("admin.products.changeStock")}
                       </button>
                       <button
                         type="button"
                         onClick={() => onChangePrice?.(product)}
                         className="rounded-md border border-blue-200 px-2.5 py-1 text-xs text-blue-700 hover:bg-blue-50"
                       >
-                        تغییر قیمت
+                        {t("admin.products.changePrice")}
                       </button>
                     </>
                   ) : (
@@ -137,14 +139,14 @@ export default function ProductTable({
                         onClick={() => onEdit?.(product)}
                         className="rounded-md border border-gray-300 px-2.5 py-1 text-xs text-gray-700 hover:bg-gray-100"
                       >
-                        ویرایش
+                        {t("admin.common.edit")}
                       </button>
                       <button
                         type="button"
                         onClick={() => onDelete?.(product)}
                         className="rounded-md border border-red-200 px-2.5 py-1 text-xs text-red-700 hover:bg-red-50"
                       >
-                        حذف
+                        {t("admin.common.delete")}
                       </button>
                     </>
                   )}

@@ -13,3 +13,15 @@ export type ProductDetail = Product & {
   stock: number;
   numReviews: number;
 };
+
+export type StoreProductsPagination = {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+};
+
+export type StoreProductsResult = {
+  products: Product[];
+  pagination: StoreProductsPagination;
+};

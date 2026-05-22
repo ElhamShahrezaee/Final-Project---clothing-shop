@@ -1,4 +1,5 @@
 import axios from "axios";
+import i18n from "../../../../i18n";
 import { apiClient } from "../../../../lib/api/client";
 import type { ApiResponse } from "../../../../lib/api/types";
 import type { AdminProductFormValues } from "../types/productForm";
@@ -24,13 +25,13 @@ export async function updateAdminProduct(
     );
 
     if (!data.success) {
-      throw new Error(data.message || "خطا در بروزرسانی محصول");
+      throw new Error(data.message || i18n.t("admin.apiErrors.updateProduct"));
     }
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const message =
         (error.response?.data as ApiResponse<unknown> | undefined)?.message ??
-        "خطا در بروزرسانی محصول";
+        i18n.t("admin.apiErrors.updateProduct");
       throw new Error(message);
     }
     throw error;
@@ -53,13 +54,13 @@ export async function quickUpdateAdminProduct(
     );
 
     if (!data.success) {
-      throw new Error(data.message || "خطا در بروزرسانی محصول");
+      throw new Error(data.message || i18n.t("admin.apiErrors.updateProduct"));
     }
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const message =
         (error.response?.data as ApiResponse<unknown> | undefined)?.message ??
-        "خطا در بروزرسانی محصول";
+        i18n.t("admin.apiErrors.updateProduct");
       throw new Error(message);
     }
     throw error;

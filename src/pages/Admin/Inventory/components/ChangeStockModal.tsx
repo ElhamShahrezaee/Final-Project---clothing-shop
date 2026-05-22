@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import type { AdminProduct } from "../../../../features/admin/products/types";
 import { useAdminLocale } from "../../../../hooks/useAdminLocale";
 import Spinner from "../../../../components/common/Spinner/Spinner";
@@ -18,6 +19,7 @@ export default function ChangeStockModal({
   onSave,
   onCancel,
 }: ChangeStockModalProps) {
+  const { t } = useTranslation();
   const { dir, textAlign } = useAdminLocale();
   const imageUrl = product.images[0];
   const [stockInput, setStockInput] = useState(String(product.stock));
@@ -31,13 +33,13 @@ export default function ChangeStockModal({
   const handleSave = () => {
     const trimmed = stockInput.trim();
     if (trimmed === "") {
-      setValidationError("موجودی را وارد کنید.");
+      setValidationError(t("admin.validation.stockRequired"));
       return;
     }
 
     const stock = Number(trimmed);
     if (!Number.isInteger(stock) || stock < 0) {
-      setValidationError("موجودی باید عدد صحیح بزرگ‌تر یا مساوی صفر باشد.");
+      setValidationError(t("admin.validation.stockInvalid"));
       return;
     }
 
@@ -62,9 +64,9 @@ export default function ChangeStockModal({
         onClick={(e) => e.stopPropagation()}
       >
         <h2 id="change-stock-title" className="text-lg font-semibold text-gray-900">
-          تغییر موجودی
+          {t("admin.inventory.stockModal.title")}
         </h2>
-        <p className="mt-2 text-sm text-gray-600">موجودی جدید محصول را وارد کنید.</p>
+        <p className="mt-2 text-sm text-gray-600">{t("admin.inventory.stockModal.help")}</p>
 
         <div className="mt-5 flex items-center gap-4 rounded-lg border border-gray-200 bg-gray-50 p-4">
           {imageUrl ? (
@@ -75,13 +77,13 @@ export default function ChangeStockModal({
             />
           ) : (
             <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-lg bg-gray-200 text-xs text-gray-500">
-              بدون تصویر
+              {t("admin.common.noImage")}
             </div>
           )}
           <div className="min-w-0 flex-1">
             <p className="truncate font-medium text-gray-900">{product.name}</p>
             <p className="mt-1 text-sm text-gray-600">
-              موجودی فعلی:{" "}
+              {t("admin.inventory.stockModal.currentStock")}{" "}
               <span className="font-medium text-gray-900">{product.stock}</span>
             </p>
           </div>
@@ -92,7 +94,7 @@ export default function ChangeStockModal({
             htmlFor="product-stock"
             className="mb-1.5 block text-sm font-medium text-gray-700"
           >
-            موجودی جدید
+            {t("admin.inventory.stockModal.newStock")}
           </label>
           <input
             id="product-stock"
@@ -121,7 +123,7 @@ export default function ChangeStockModal({
             disabled={isSaving}
             className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            انصراف
+            {t("admin.common.cancel")}
           </button>
           <button
             type="button"
@@ -132,10 +134,10 @@ export default function ChangeStockModal({
             {isSaving ? (
               <>
                 <Spinner size="sm" className="border-white/40 border-t-white" />
-                <span>در حال ذخیره...</span>
+                <span>{t("admin.common.saving")}</span>
               </>
             ) : (
-              "ذخیره"
+              t("admin.common.save")
             )}
           </button>
         </div>

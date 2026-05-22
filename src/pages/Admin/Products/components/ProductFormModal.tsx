@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type ChangeEvent } from "react";
+import { useTranslation } from "react-i18next";
 import type { AdminProduct } from "../../../../features/admin/products/types";
 import {
   defaultProductFormValues,
@@ -48,6 +49,7 @@ export default function ProductFormModal({
   onSubmit,
   onCancel,
 }: ProductFormModalProps) {
+  const { t } = useTranslation();
   const { dir, textAlign } = useAdminLocale();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -100,7 +102,7 @@ export default function ProductFormModal({
 
   const handleSubmit = () => {
     const totalImages = existingImageUrls.length + newImageFiles.length;
-    const error = validateProductForm(values, totalImages);
+    const error = validateProductForm(values, totalImages, t);
     if (error) {
       setValidationError(error);
       return;
@@ -110,8 +112,12 @@ export default function ProductFormModal({
   };
 
   const displayError = validationError ?? errorMessage;
-  const title = mode === "create" ? "اضافه کردن محصول جدید" : "ویرایش محصول";
-  const submitLabel = mode === "create" ? "اضافه کردن محصول" : "ویرایش محصول";
+  const title =
+    mode === "create" ? t("admin.products.form.createTitle") : t("admin.products.form.editTitle");
+  const submitLabel =
+    mode === "create"
+      ? t("admin.products.form.createSubmit")
+      : t("admin.products.form.editSubmit");
 
   return (
     <div
@@ -137,7 +143,7 @@ export default function ProductFormModal({
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="sm:col-span-2">
               <label htmlFor="product-name" className="mb-1 block text-sm font-medium text-gray-700">
-                نام <span className="text-red-600">*</span>
+                {t("admin.products.form.name")} <span className="text-red-600">*</span>
               </label>
               <input
                 id="product-name"
@@ -155,7 +161,7 @@ export default function ProductFormModal({
                 htmlFor="product-description"
                 className="mb-1 block text-sm font-medium text-gray-700"
               >
-                توضیحات <span className="text-red-600">*</span>
+                {t("admin.products.form.description")} <span className="text-red-600">*</span>
               </label>
               <textarea
                 id="product-description"
@@ -173,7 +179,7 @@ export default function ProductFormModal({
                 htmlFor="product-category"
                 className="mb-1 block text-sm font-medium text-gray-700"
               >
-                دسته‌بندی <span className="text-red-600">*</span>
+                {t("admin.products.form.category")} <span className="text-red-600">*</span>
               </label>
               <input
                 id="product-category"
@@ -188,7 +194,7 @@ export default function ProductFormModal({
 
             <div>
               <label htmlFor="product-brand" className="mb-1 block text-sm font-medium text-gray-700">
-                برند <span className="text-red-600">*</span>
+                {t("admin.products.form.brand")} <span className="text-red-600">*</span>
               </label>
               <input
                 id="product-brand"
@@ -203,7 +209,7 @@ export default function ProductFormModal({
 
             <div>
               <label htmlFor="product-price" className="mb-1 block text-sm font-medium text-gray-700">
-                قیمت <span className="text-red-600">*</span>
+                {t("admin.products.form.price")} <span className="text-red-600">*</span>
               </label>
               <input
                 id="product-price"
@@ -221,7 +227,7 @@ export default function ProductFormModal({
 
             <div>
               <label htmlFor="product-stock" className="mb-1 block text-sm font-medium text-gray-700">
-                موجودی <span className="text-red-600">*</span>
+                {t("admin.products.form.stock")} <span className="text-red-600">*</span>
               </label>
               <input
                 id="product-stock"
@@ -239,7 +245,7 @@ export default function ProductFormModal({
 
             <div>
               <label htmlFor="product-rating" className="mb-1 block text-sm font-medium text-gray-700">
-                امتیاز <span className="text-red-600">*</span>
+                {t("admin.products.form.rating")} <span className="text-red-600">*</span>
               </label>
               <input
                 id="product-rating"
@@ -261,7 +267,7 @@ export default function ProductFormModal({
                 htmlFor="product-num-reviews"
                 className="mb-1 block text-sm font-medium text-gray-700"
               >
-                تعداد نظرات <span className="text-red-600">*</span>
+                {t("admin.products.form.numReviews")} <span className="text-red-600">*</span>
               </label>
               <input
                 id="product-num-reviews"
@@ -279,7 +285,7 @@ export default function ProductFormModal({
 
             <div className="sm:col-span-2">
               <label htmlFor="product-active" className="mb-1 block text-sm font-medium text-gray-700">
-                وضعیت <span className="text-red-600">*</span>
+                {t("admin.products.form.status")} <span className="text-red-600">*</span>
               </label>
               <select
                 id="product-active"
@@ -288,18 +294,16 @@ export default function ProductFormModal({
                 disabled={isSaving}
                 className={inputClass}
               >
-                <option value="active">فعال</option>
-                <option value="inactive">غیرفعال</option>
+                <option value="active">{t("admin.common.active")}</option>
+                <option value="inactive">{t("admin.common.inactive")}</option>
               </select>
             </div>
 
             <div className="sm:col-span-2">
               <label className="mb-1 block text-sm font-medium text-gray-700">
-                تصاویر <span className="text-red-600">*</span>
+                {t("admin.products.form.images")} <span className="text-red-600">*</span>
               </label>
-              <p className="mb-2 text-xs text-gray-500">
-                می‌توانید یک یا چند تصویر انتخاب کنید (حداقل یک تصویر برای ذخیره لازم است).
-              </p>
+              <p className="mb-2 text-xs text-gray-500">{t("admin.products.form.imagesHint")}</p>
               <input
                 ref={fileInputRef}
                 type="file"
@@ -324,7 +328,7 @@ export default function ProductFormModal({
                         onClick={() => removeExistingImage(index)}
                         disabled={isSaving}
                         className="absolute -left-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-xs text-white hover:bg-red-700"
-                        aria-label="حذف تصویر"
+                        aria-label={t("admin.common.removeImage")}
                       >
                         ×
                       </button>
@@ -342,7 +346,7 @@ export default function ProductFormModal({
                         onClick={() => removeNewImage(index)}
                         disabled={isSaving}
                         className="absolute -left-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-xs text-white hover:bg-red-700"
-                        aria-label="حذف تصویر"
+                        aria-label={t("admin.common.removeImage")}
                       >
                         ×
                       </button>
@@ -367,7 +371,7 @@ export default function ProductFormModal({
             disabled={isSaving}
             className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            انصراف
+            {t("admin.common.cancel")}
           </button>
           <button
             type="button"
@@ -378,7 +382,7 @@ export default function ProductFormModal({
             {isSaving ? (
               <>
                 <Spinner size="sm" className="border-white/40 border-t-white" />
-                <span>در حال ذخیره...</span>
+                <span>{t("admin.common.saving")}</span>
               </>
             ) : (
               submitLabel

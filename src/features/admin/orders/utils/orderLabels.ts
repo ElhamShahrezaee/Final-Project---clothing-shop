@@ -1,20 +1,24 @@
+import type { TFunction } from "i18next";
 import type { OrderStatus } from "../types";
 
-export const ORDER_STATUS_LABELS: Record<OrderStatus, string> = {
-  pending: "در انتظار تایید",
-  confirmed: "تایید شده",
-  shipping: "در حال ارسال",
-  delivered: "تحویل داده شده",
-  cancelled: "لغو شده",
-};
-
-export const ORDER_STATUS_OPTIONS: { value: OrderStatus; label: string }[] = [
-  { value: "pending", label: ORDER_STATUS_LABELS.pending },
-  { value: "confirmed", label: ORDER_STATUS_LABELS.confirmed },
-  { value: "shipping", label: ORDER_STATUS_LABELS.shipping },
-  { value: "delivered", label: ORDER_STATUS_LABELS.delivered },
-  { value: "cancelled", label: ORDER_STATUS_LABELS.cancelled },
+export const ORDER_STATUSES: OrderStatus[] = [
+  "pending",
+  "confirmed",
+  "shipping",
+  "delivered",
+  "cancelled",
 ];
+
+export function getOrderStatusLabel(status: OrderStatus, t: TFunction): string {
+  return t(`admin.orders.status.${status}`);
+}
+
+export function getOrderStatusOptions(t: TFunction): { value: OrderStatus; label: string }[] {
+  return ORDER_STATUSES.map((value) => ({
+    value,
+    label: getOrderStatusLabel(value, t),
+  }));
+}
 
 export function getOrderTotal(
   totalPrice: number,

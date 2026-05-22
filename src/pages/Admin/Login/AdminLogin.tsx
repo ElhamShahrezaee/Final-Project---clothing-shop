@@ -1,6 +1,7 @@
 ﻿import { useRef, useState } from "react";
 import type { FormEvent } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import {
   VisibilityIcon,
   VisibilityOffIcon,
@@ -8,6 +9,7 @@ import {
 import { useAuth } from "../../../context/auth/useAuth";
 import { useAdminLocale } from "../../../hooks/useAdminLocale";
 import { saveLoginCredential } from "../../../lib/auth/saveLoginCredential";
+import brandLogo from "../../../assets/images/Logo-ELISHA-STOR.svg.png";
 
 export default function AdminLogin() {
   const [email, setEmail] = useState("");
@@ -18,6 +20,7 @@ export default function AdminLogin() {
   const passwordRef = useRef<HTMLInputElement>(null);
 
   const { login } = useAuth();
+  const { t } = useTranslation();
   const { isFa, dir, textAlign } = useAdminLocale();
   const navigate = useNavigate();
   const location = useLocation();
@@ -46,7 +49,7 @@ export default function AdminLogin() {
       await saveLoginCredential(trimmedEmail, password);
       navigate(from, { replace: true });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "خطا در ورود");
+      setError(err instanceof Error ? err.message : t("admin.login.error"));
     } finally {
       setIsSubmitting(false);
     }
@@ -55,14 +58,27 @@ export default function AdminLogin() {
   return (
     <div
       dir={dir}
-      className={`flex min-h-screen items-center justify-center bg-gray-50 px-4 ${textAlign}`}
+      className={`flex min-h-screen flex-col items-center justify-center bg-gray-50 px-4 ${textAlign}`}
     >
+      <button
+        type="button"
+        onClick={() => navigate("/")}
+        className="mb-8 flex shrink-0 items-center"
+        aria-label={t("app.brand")}
+      >
+        <img
+          src={brandLogo}
+          alt={t("app.brand")}
+          className="h-24 w-auto max-w-[min(90vw,28rem)] object-contain sm:h-32 sm:max-w-[32rem]"
+        />
+      </button>
+
       <div className="w-full max-w-md rounded-xl border bg-white p-8 shadow-sm">
         <h1 className={`text-2xl font-semibold text-gray-900 ${textAlign}`}>
-          ورود به پنل ادمین
+          {t("admin.login.title")}
         </h1>
         <p className={`mt-2 text-sm text-gray-500 ${textAlign}`}>
-          با حساب ادمین وارد شوید
+          {t("admin.login.subtitle")}
         </p>
 
         <form
@@ -79,7 +95,7 @@ export default function AdminLogin() {
               htmlFor="email"
               className={`mb-1.5 block text-sm font-medium text-gray-700 ${textAlign}`}
             >
-              ایمیل
+              {t("admin.login.email")}
             </label>
             <input
               id="email"
@@ -103,7 +119,7 @@ export default function AdminLogin() {
               htmlFor="password"
               className={`mb-1.5 block text-sm font-medium text-gray-700 ${textAlign}`}
             >
-              رمز عبور
+              {t("admin.login.password")}
             </label>
             <div
               className={`relative flex items-center rounded-lg border border-gray-300 bg-white transition focus-within:border-gray-900 focus-within:ring-1 focus-within:ring-gray-900 ${textAlign}`}
@@ -124,7 +140,9 @@ export default function AdminLogin() {
                 type="button"
                 onClick={() => setShowPassword((prev) => !prev)}
                 className={`absolute top-1/2 ${togglePosition} z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-md text-gray-600 transition hover:bg-gray-100 hover:text-gray-900`}
-                aria-label={showPassword ? "مخفی کردن رمز عبور" : "نمایش رمز عبور"}
+                aria-label={
+                  showPassword ? t("admin.login.hidePassword") : t("admin.login.showPassword")
+                }
                 aria-pressed={showPassword}
               >
                 {showPassword ? (
@@ -150,7 +168,7 @@ export default function AdminLogin() {
             disabled={isSubmitting}
             className="w-full rounded-lg bg-gray-900 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {isSubmitting ? "در حال ورود..." : "ورود"}
+            {isSubmitting ? t("admin.login.submitting") : t("admin.login.submit")}
           </button>
         </form>
       </div>

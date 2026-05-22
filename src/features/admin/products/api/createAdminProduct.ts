@@ -1,4 +1,5 @@
 import axios from "axios";
+import i18n from "../../../../i18n";
 import { apiClient } from "../../../../lib/api/client";
 import type { ApiResponse } from "../../../../lib/api/types";
 import type { AdminProductFormValues } from "../types/productForm";
@@ -17,13 +18,13 @@ export async function createAdminProduct(
     );
 
     if (!data.success) {
-      throw new Error(data.message || "خطا در ایجاد محصول");
+      throw new Error(data.message || i18n.t("admin.apiErrors.createProduct"));
     }
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const message =
         (error.response?.data as ApiResponse<unknown> | undefined)?.message ??
-        "خطا در ایجاد محصول";
+        i18n.t("admin.apiErrors.createProduct");
       throw new Error(message);
     }
     throw error;
