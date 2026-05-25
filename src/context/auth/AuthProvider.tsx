@@ -1,94 +1,153 @@
 import axios from "axios";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { getCurrentUser } from "../../features/auth/api/getMe";
-import { loginUser } from "../../features/auth/api/login";
+import { loginUser as loginApi } from "../../features/auth/api/login";
 import type { User } from "../../features/auth/types";
-
-function isUnauthorizedError(error: unknown): boolean {
-  return axios.isAxiosError(error) && error.response?.status === 401;
-}
 import {
   clearAuthSession,
   getStoredRefreshToken,
   getStoredToken,
   getStoredUser,
+  migrateLegacyAdminTokens,
   saveAuthSession,
 } from "../../features/auth/storage";
 import { AuthContext } from "./AuthContext";
 
+function isUnauthorizedError(error: unknown): boolean {
+  return axios.isAxiosError(error) && error.response?.status === 401;
+}
+
+async function restoreScopeSession(
+  scope: "admin" | "user",
+  setUser: (user: User | null) => void,
+): Promise<void> {
+  const token = getStoredToken(scope);
+  const storedUser = getStoredUser(scope);
+
+  if (!token || !storedUser) return;
+
+  setUser(storedUser);
+
+  try {
+    const currentUser = await getCurrentUser(scope);
+    setUser(currentUser);
+    const refreshToken = getStoredRefreshToken(scope);
+    if (refreshToken) {
+      saveAuthSession(scope, token, refreshToken, currentUser);
+    }
+  } catch (error) {
+    if (isUnauthorizedError(error)) {
+      clearAuthSession(scope);
+      setUser(null);
+    }
+  }
+}
+
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [adminUser, setAdminUser] = useState<User | null>(null);
+  const [storeUser, setStoreUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
 
-    async function restoreSession() {
-      const token = getStoredToken();
-      const storedUser = getStoredUser();
+    async function restoreSessions() {
+      migrateLegacyAdminTokens();
 
-      if (!token || !storedUser) {
-        if (!cancelled) setIsLoading(false);
-        return;
-      }
+      await restoreScopeSession("admin", (user) => {
+        if (!cancelled) setAdminUser(user);
+      });
+      await restoreScopeSession("user", (user) => {
+        if (!cancelled) setStoreUser(user);
+      });
 
-      // Keep the user logged in across refresh using stored session.
-      if (!cancelled) setUser(storedUser);
-
-      try {
-        const currentUser = await getCurrentUser();
-        if (!cancelled) {
-          setUser(currentUser);
-          const refreshToken = getStoredRefreshToken();
-          if (refreshToken) {
-            saveAuthSession(token, refreshToken, currentUser);
-          }
-        }
-      } catch (error) {
-        // Only logout when the token is invalid/expired — not on network/API outages.
-        if (isUnauthorizedError(error)) {
-          clearAuthSession();
-          if (!cancelled) setUser(null);
-        }
-      } finally {
-        if (!cancelled) setIsLoading(false);
-      }
+      if (!cancelled) setIsLoading(false);
     }
 
-    void restoreSession();
+    void restoreSessions();
 
     return () => {
       cancelled = true;
     };
   }, []);
 
-  const login = useCallback(async (email: string, password: string) => {
-    const data = await loginUser({ email, password });
+  const loginAdmin = useCallback(async (email: string, password: string) => {
+    const data = await loginApi({ email, password });
 
     if (data.user.role !== "admin") {
-      clearAuthSession();
       throw new Error("شما دسترسی ادمین ندارید");
     }
 
-    saveAuthSession(data.token, data.refreshToken, data.user);
-    setUser(data.user);
+    saveAuthSession("admin", data.token, data.refreshToken, data.user);
+    setAdminUser(data.user);
+    return data.user;
   }, []);
 
-  const logout = useCallback(() => {
-    clearAuthSession();
-    setUser(null);
+  const loginUser = useCallback(async (email: string, password: string) => {
+    const data = await loginApi({ email, password });
+
+    if (data.user.role === "admin") {
+      saveAuthSession("admin", data.token, data.refreshToken, data.user);
+      setAdminUser(data.user);
+      return data.user;
+    }
+
+    if (data.user.role !== "user") {
+      throw new Error("نقش کاربر معتبر نیست");
+    }
+
+    saveAuthSession("user", data.token, data.refreshToken, data.user);
+    setStoreUser(data.user);
+    return data.user;
   }, []);
+
+  const logoutAdmin = useCallback(() => {
+    clearAuthSession("admin");
+    setAdminUser(null);
+  }, []);
+
+  const logoutUser = useCallback(() => {
+    clearAuthSession("user");
+    setStoreUser(null);
+  }, []);
+
+  const login = useCallback(
+    async (email: string, password: string) => {
+      await loginAdmin(email, password);
+    },
+    [loginAdmin],
+  );
+
+  const logout = logoutAdmin;
 
   const value = useMemo(
     () => ({
-      user,
+      adminUser,
+      storeUser,
       isLoading,
-      isAuthenticated: Boolean(user && getStoredToken()),
-      isAdmin: user?.role === "admin",
+      isAdminAuthenticated: Boolean(adminUser && getStoredToken("admin")),
+      isUserAuthenticated: Boolean(storeUser && getStoredToken("user")),
+      user: adminUser,
+      isAuthenticated: Boolean(adminUser && getStoredToken("admin")),
+      isAdmin: adminUser?.role === "admin",
+      loginAdmin,
+      loginUser,
       login,
+      logoutAdmin,
+      logoutUser,
       logout,
     }),
-    [user, isLoading, login, logout],
+    [
+      adminUser,
+      storeUser,
+      isLoading,
+      loginAdmin,
+      loginUser,
+      login,
+      logoutAdmin,
+      logoutUser,
+      logout,
+    ],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -12,6 +12,8 @@ import AdminInventory from "../pages/Admin/Inventory/AdminInventory";
 import AdminOrders from "../pages/Admin/Orders/AdminOrders";
 import AdminProtectedRoute from "./AdminProtectedRoute";
 import AdminLoginRoute from "./AdminLoginRoute";
+import UserLoginRoute from "./UserLoginRoute";
+import Register from "../pages/Register/Register";
 
 const AppRoutes = () => {
   return (
@@ -22,6 +24,9 @@ const AppRoutes = () => {
         <Route path="/products/:id" element={<ProductDetails />} />
         <Route path="/cart" element={<Cart />} />
       </Route>
+
+      <Route path="/login" element={<UserLoginRoute />} />
+      <Route path="/register" element={<Register />} />
 
       <Route path="/admin/login" element={<AdminLoginRoute />} />
 

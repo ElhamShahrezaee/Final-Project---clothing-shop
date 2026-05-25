@@ -8,6 +8,20 @@
     "cart": "سبد خرید",
     "login": "ورود/ثبت نام"
   },
+  "auth": {
+    "loginTitle": "ورود",
+    "loginSubtitle": "با حساب کاربری خود وارد شوید",
+    "email": "ایمیل",
+    "password": "رمز عبور",
+    "submit": "ورود",
+    "submitting": "در حال ورود...",
+    "error": "خطا در ورود",
+    "hidePassword": "مخفی کردن رمز عبور",
+    "showPassword": "نمایش رمز عبور",
+    "registerLink": "ثبت نام",
+    "noAdminAccess": "شما دسترسی ادمین ندارید",
+    "invalidRole": "نقش کاربر معتبر نیست"
+  },
   "search": {
     "placeholder": "جستجو...",
     "button": "جستجو"

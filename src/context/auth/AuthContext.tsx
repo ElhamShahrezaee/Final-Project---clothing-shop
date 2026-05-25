@@ -2,11 +2,24 @@ import { createContext } from "react";
 import type { User } from "../../features/auth/types";
 
 export interface AuthContextValue {
-  user: User | null;
+  adminUser: User | null;
+  storeUser: User | null;
   isLoading: boolean;
+  isAdminAuthenticated: boolean;
+  isUserAuthenticated: boolean;
+  /** @deprecated Admin panel — use adminUser */
+  user: User | null;
+  /** @deprecated Admin panel */
   isAuthenticated: boolean;
+  /** @deprecated Admin panel */
   isAdmin: boolean;
+  loginAdmin: (email: string, password: string) => Promise<User>;
+  loginUser: (email: string, password: string) => Promise<User>;
+  /** @deprecated Admin panel */
   login: (email: string, password: string) => Promise<void>;
+  logoutAdmin: () => void;
+  logoutUser: () => void;
+  /** @deprecated Admin panel */
   logout: () => void;
 }
 

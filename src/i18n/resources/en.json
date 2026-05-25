@@ -8,6 +8,20 @@
     "cart": "Cart",
     "login": "Login / Sign up"
   },
+  "auth": {
+    "loginTitle": "Sign in",
+    "loginSubtitle": "Sign in with your account",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Sign in",
+    "submitting": "Signing in...",
+    "error": "Sign-in failed",
+    "hidePassword": "Hide password",
+    "showPassword": "Show password",
+    "registerLink": "Sign up",
+    "noAdminAccess": "You do not have admin access",
+    "invalidRole": "Invalid user role"
+  },
   "search": {
     "placeholder": "Search...",
     "button": "Search"
