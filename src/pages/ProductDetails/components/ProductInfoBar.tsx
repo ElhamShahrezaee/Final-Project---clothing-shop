@@ -68,16 +68,19 @@ function ProductMeta({
 
 function ProductActions({
   price,
+  stock,
   stockLabel,
   isFa,
   priceClassName,
 }: {
   price: number;
+  stock: number;
   stockLabel: string;
   isFa: boolean;
   priceClassName: string;
 }) {
   const { t } = useTranslation();
+  const isOutOfStock = stock <= 0;
 
   return (
     <div className="mx-auto flex w-full max-w-xs flex-col items-center">
@@ -89,9 +92,15 @@ function ProductActions({
 
       <button
         type="button"
-        className="mt-5 w-full border border-gray-900 px-6 py-3 text-sm font-medium tracking-wide transition hover:bg-gray-900 hover:text-white"
+        disabled={isOutOfStock}
+        className={[
+          "mt-5 w-full border px-6 py-3 text-sm font-medium tracking-wide transition",
+          isOutOfStock
+            ? "cursor-not-allowed border-gray-300 bg-gray-100 text-gray-500"
+            : "border-gray-900 hover:bg-gray-900 hover:text-white",
+        ].join(" ")}
       >
-        {t("productDetails.addToCart")}
+        {isOutOfStock ? t("productDetails.outOfStock") : t("productDetails.addToCart")}
       </button>
 
       <p className="mt-4 w-full text-center text-sm text-gray-700">
@@ -114,6 +123,7 @@ export default function ProductInfoBar({ product }: ProductInfoBarProps) {
         <ProductMeta product={product} ratingLabel={ratingLabel} isFa={isFa} />
         <ProductActions
           price={product.price}
+          stock={product.stock}
           stockLabel={stockLabel}
           isFa={isFa}
           priceClassName="text-2xl"
@@ -123,6 +133,7 @@ export default function ProductInfoBar({ product }: ProductInfoBarProps) {
       <div className="hidden gap-8 sm:grid sm:grid-cols-2">
         <ProductActions
           price={product.price}
+          stock={product.stock}
           stockLabel={stockLabel}
           isFa={isFa}
           priceClassName="text-3xl"

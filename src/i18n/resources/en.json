@@ -27,6 +27,7 @@
     "category": "Category",
     "brand": "Brand",
     "addToCart": "Add to cart",
+    "outOfStock": "Out of stock",
     "stock": "Stock",
     "rating": "Rating",
     "descriptionTitle": "Product description",
