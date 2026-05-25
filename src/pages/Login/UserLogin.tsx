@@ -7,10 +7,13 @@ import {
   VisibilityOffIcon,
 } from "../../components/common/icons/MaterialEyeIcons";
 import { useUserAuth } from "../../context/auth/useUserAuth";
+import { useToast } from "../../context/toast/ToastContext";
+import { getUserDisplayName } from "../../features/auth/utils/getUserDisplayName";
 import { useAppLocale } from "../../hooks/useAppLocale";
-import { getSafeReturnUrl } from "../../lib/auth/returnUrl";
+import { buildRegisterPath, getSafeReturnUrl } from "../../lib/auth/returnUrl";
 import { saveLoginCredential } from "../../lib/auth/saveLoginCredential";
 import brandLogo from "../../assets/images/Logo-ELISHA-STOR.svg.png";
+import AuthLanguageToggle from "../../components/common/AuthLanguageToggle";
 
 export default function UserLogin() {
   const [email, setEmail] = useState("");
@@ -21,12 +24,14 @@ export default function UserLogin() {
   const passwordRef = useRef<HTMLInputElement>(null);
 
   const { login } = useUserAuth();
+  const { showToast } = useToast();
   const { t } = useTranslation();
   const { isFa, dir, textAlign } = useAppLocale();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
   const returnUrl = getSafeReturnUrl(searchParams.get("returnUrl"));
+  const registerPath = buildRegisterPath(returnUrl);
 
   const inputDir = isFa ? "rtl" : "ltr";
   const passwordPadding = isFa ? "pl-11" : "pr-11";
@@ -47,6 +52,12 @@ export default function UserLogin() {
       const loggedInUser = await login(trimmedEmail, password);
       await saveLoginCredential(trimmedEmail, password);
 
+      const displayName = getUserDisplayName(
+        loggedInUser.name,
+        t("auth.defaultUser"),
+      );
+      showToast(t("auth.welcomeMessage", { name: displayName }));
+
       if (loggedInUser.role === "admin") {
         navigate("/admin/dashboard", { replace: true });
       } else {
@@ -62,8 +73,10 @@ export default function UserLogin() {
   return (
     <div
       dir={dir}
-      className={`flex min-h-screen flex-col items-center justify-center bg-gray-50 px-4 ${textAlign}`}
+      className={`relative flex min-h-screen flex-col items-center justify-center bg-gray-50 px-4 ${textAlign}`}
     >
+      <AuthLanguageToggle />
+
       <button
         type="button"
         onClick={() => navigate("/")}
@@ -161,7 +174,7 @@ export default function UserLogin() {
 
         <p className="mt-6 text-center text-sm text-gray-600">
           <Link
-            to="/register"
+            to={registerPath}
             className="inline-block font-medium text-gray-900 underline-offset-2 hover:underline"
           >
             {t("auth.registerLink")}

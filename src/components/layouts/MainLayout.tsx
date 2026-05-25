@@ -9,7 +9,7 @@ const MainLayout = () => {
   return (
     <div
       dir={dir}
-      className={`flex min-h-screen max-w-full flex-col overflow-x-hidden bg-white text-gray-900 ${textAlign}`}
+      className={`flex min-h-screen max-w-full flex-col bg-white text-gray-900 ${textAlign}`}
     >
       <Header />
 

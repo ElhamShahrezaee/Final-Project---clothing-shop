@@ -1,19 +1,21 @@
 import axios from "axios";
 import { apiClient } from "../../../lib/api/client";
-import type { ApiResponse, LoginCredentials, LoginData } from "../types";
+import type { ApiResponse, LoginData, RegisterPayload } from "../types";
 import { mapAuthUser, type RawAuthUser } from "../utils/mapAuthUser";
 
-export async function loginUser(
-  credentials: LoginCredentials,
-): Promise<LoginData> {
+export async function registerUserApi(payload: RegisterPayload): Promise<LoginData | null> {
   try {
-    const { data } = await apiClient.post<ApiResponse<LoginData & { user: RawAuthUser }>>(
-      "/api/auth/login",
-      credentials,
+    const { data } = await apiClient.post<ApiResponse<LoginData & { user?: RawAuthUser }>>(
+      "/api/auth/register",
+      payload,
     );
 
-    if (!data.success || !data.data) {
-      throw new Error(data.message || "خطا در ورود");
+    if (!data.success) {
+      throw new Error(data.message || "خطا در ثبت نام");
+    }
+
+    if (!data.data?.token || !data.data.user) {
+      return null;
     }
 
     return {
@@ -25,7 +27,7 @@ export async function loginUser(
     if (axios.isAxiosError(error)) {
       const message =
         (error.response?.data as ApiResponse<unknown> | undefined)?.message ??
-        "خطا در ورود";
+        "خطا در ثبت نام";
       throw new Error(message);
     }
     throw error;

@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import type { User } from "../../features/auth/types";
+import type { RegisterPayload, User } from "../../features/auth/types";
 
 export interface AuthContextValue {
   adminUser: User | null;
@@ -15,6 +15,7 @@ export interface AuthContextValue {
   isAdmin: boolean;
   loginAdmin: (email: string, password: string) => Promise<User>;
   loginUser: (email: string, password: string) => Promise<User>;
+  registerUser: (payload: RegisterPayload) => Promise<User>;
   /** @deprecated Admin panel */
   login: (email: string, password: string) => Promise<void>;
   logoutAdmin: () => void;

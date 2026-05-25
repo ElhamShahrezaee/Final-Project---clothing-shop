@@ -19,11 +19,42 @@
     "hidePassword": "Hide password",
     "showPassword": "Show password",
     "registerLink": "Sign up",
+    "registerTitle": "Sign up",
+    "registerSubtitle": "Create a new account",
+    "name": "Name",
+    "phone": "Mobile number",
+    "confirmPassword": "Confirm password",
+    "registerSubmit": "Sign up",
+    "registerSubmitting": "Signing up...",
+    "registerError": "Registration failed",
+    "hasAccount": "Already have an account?",
+    "defaultUser": "User",
+    "welcomeMessage": "Welcome, dear {{name}}",
+    "menuProfile": "View profile",
+    "menuOrders": "Orders",
+    "menuAddresses": "Addresses",
+    "menuLogout": "Log out",
     "noAdminAccess": "You do not have admin access",
-    "invalidRole": "Invalid user role"
+    "invalidRole": "Invalid user role",
+    "validation": {
+      "nameRequired": "Name is required.",
+      "phoneRequired": "Mobile number is required.",
+      "phoneInvalid": "Mobile number must be 11 digits.",
+      "emailRequired": "Email is required.",
+      "passwordRequired": "Password is required.",
+      "passwordRules": "Password must be at least 8 characters with one uppercase letter and one number.",
+      "confirmPasswordRequired": "Please confirm your password.",
+      "passwordMismatch": "Passwords do not match."
+    },
+    "account": {
+      "profileTitle": "Profile",
+      "ordersTitle": "Orders",
+      "addressesTitle": "Addresses",
+      "comingSoon": "Coming soon..."
+    }
   },
   "search": {
-    "placeholder": "Search...",
+    "placeholder": "Search",
     "button": "Search"
   },
   "home": {

@@ -1,113 +1,79 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import SearchIcon from "@mui/icons-material/Search";
 import LanguageIcon from "@mui/icons-material/Language";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import i18n from "../../../i18n";
 import { useUserAuth } from "../../../context/auth/useUserAuth";
-import { useAppLocale } from "../../../hooks/useAppLocale";
 import { buildLoginPath } from "../../../lib/auth/returnUrl";
 import brandLogo from "../../../assets/images/Logo-ELISHA-STOR.svg.png";
+import HeaderSearchField from "./HeaderSearchField";
+import HeaderUserMenu from "./HeaderUserMenu";
+import {
+  headerIconBtnClass,
+  headerIconClass,
+  headerOutlinedBtnClass,
+} from "./headerNavStyles";
 
-const iconClass = "h-[22px] w-[22px] shrink-0";
+const iconClass = headerIconClass;
+const iconBtnClass = headerIconBtnClass;
 
-const searchInputClass =
-  "w-full rounded-full border border-gray-900 px-4 py-2 text-sm outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900";
+/** Fixed text slot so the cart icon never shifts when language changes */
+const cartTextSlotClass = "w-[4.75rem] shrink-0 truncate text-start";
+const cartBtnWidthClass =
+  "h-10 w-[7.5rem] min-w-[7.5rem] max-w-[7.5rem] shrink-0 !justify-start !gap-0.5";
 
-const navBtnClass =
-  "inline-flex h-10 shrink-0 items-center justify-center gap-1.5 rounded-full border border-gray-900 px-3 text-sm transition hover:bg-gray-900 hover:text-white";
-
-const iconBtnClass =
-  "inline-flex h-10 w-10 shrink-0 items-center justify-center transition hover:opacity-70";
-
-const navTextBtnClass =
-  "inline-flex h-10 shrink-0 items-center justify-center gap-1.5 text-sm transition hover:opacity-70";
-
-type HeaderSearchProps = {
-  search: string;
-  onSearchChange: (value: string) => void;
-  onSubmit: () => void;
+type HeaderLanguageButtonProps = {
   compact?: boolean;
+  onToggle: () => void;
 };
 
-function HeaderSearch({ search, onSearchChange, onSubmit, compact }: HeaderSearchProps) {
-  const { t } = useTranslation();
-
+function HeaderLanguageButton({ compact, onToggle }: HeaderLanguageButtonProps) {
   if (compact) {
     return (
       <button
         type="button"
-        onClick={onSubmit}
+        onClick={onToggle}
         className={iconBtnClass}
-        aria-label={t("search.button")}
+        aria-label={i18n.language === "fa" ? "English" : "فارسی"}
       >
-        <SearchIcon className={iconClass} aria-hidden />
+        <LanguageIcon className={iconClass} aria-hidden />
       </button>
     );
   }
 
   return (
-    <>
-      <div className="w-full max-w-xs">
-        <input
-          value={search}
-          onChange={(e) => onSearchChange(e.target.value)}
-          placeholder={t("search.placeholder")}
-          className={searchInputClass}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") onSubmit();
-          }}
-        />
-      </div>
-      <button type="button" onClick={onSubmit} className={`${navBtnClass} min-w-[5.5rem]`}>
-        <SearchIcon className={iconClass} aria-hidden />
-        <span>{t("search.button")}</span>
-      </button>
-    </>
+    <button type="button" onClick={onToggle} className={`${headerOutlinedBtnClass} w-[5.25rem]`}>
+      <LanguageIcon className={iconClass} aria-hidden />
+      <span className="w-7 text-center">{i18n.language === "fa" ? "EN" : "FA"}</span>
+    </button>
   );
 }
 
 type HeaderNavActionsProps = {
   compact?: boolean;
-  onLanguageToggle: () => void;
+  isUserLoggedIn: boolean;
   onLoginClick: () => void;
   onCartClick: () => void;
 };
 
 function HeaderNavActions({
   compact,
-  onLanguageToggle,
+  isUserLoggedIn,
   onLoginClick,
   onCartClick,
 }: HeaderNavActionsProps) {
   const { t } = useTranslation();
-
-  const languageButton = compact ? (
-    <button
-      type="button"
-      onClick={onLanguageToggle}
-      className={iconBtnClass}
-      aria-label={i18n.language === "fa" ? "English" : "فارسی"}
-    >
-      <LanguageIcon className={iconClass} aria-hidden />
-    </button>
-  ) : (
-    <button type="button" onClick={onLanguageToggle} className={`${navBtnClass} w-[5.25rem]`}>
-      <LanguageIcon className={iconClass} aria-hidden />
-      <span className="w-7 text-center">{i18n.language === "fa" ? "EN" : "FA"}</span>
-    </button>
-  );
 
   const cartButton = compact ? (
     <button type="button" onClick={onCartClick} className={iconBtnClass} aria-label={t("nav.cart")}>
       <ShoppingCartOutlinedIcon className={iconClass} aria-hidden />
     </button>
   ) : (
-    <button type="button" onClick={onCartClick} className={`${navTextBtnClass} w-[6.5rem]`}>
+    <button type="button" onClick={onCartClick} className={`${headerOutlinedBtnClass} ${cartBtnWidthClass}`}>
       <ShoppingCartOutlinedIcon className={iconClass} aria-hidden />
-      <span className="truncate">{t("nav.cart")}</span>
+      <span className={cartTextSlotClass}>{t("nav.cart")}</span>
     </button>
   );
 
@@ -116,22 +82,49 @@ function HeaderNavActions({
       <PersonOutlinedIcon className={iconClass} aria-hidden />
     </button>
   ) : (
-    <button type="button" onClick={onLoginClick} className={`${navTextBtnClass} w-[9rem]`}>
+    <button type="button" onClick={onLoginClick} className={`${headerOutlinedBtnClass} w-[9rem]`}>
       <PersonOutlinedIcon className={iconClass} aria-hidden />
       <span className="truncate">{t("nav.login")}</span>
     </button>
   );
 
-  const buttons = [languageButton, loginButton, cartButton];
+  const userOrLogin = isUserLoggedIn ? (
+    <HeaderUserMenu compact={compact} />
+  ) : (
+    loginButton
+  );
 
-  return <div className="flex items-center gap-2">{buttons}</div>;
+  return (
+    <div className="flex items-center gap-2">
+      {userOrLogin}
+      {cartButton}
+    </div>
+  );
+}
+
+type HeaderRightSectionProps = {
+  compact?: boolean;
+  onLanguageToggle: () => void;
+  children?: ReactNode;
+};
+
+/** Right side of header: main actions in one div, language toggle in a separate div. */
+function HeaderRightSection({ compact, onLanguageToggle, children }: HeaderRightSectionProps) {
+  return (
+    <div className="flex items-center justify-end gap-2">
+      {children ? (
+        <div className="flex items-center gap-1 sm:gap-2">{children}</div>
+      ) : null}
+      <div className="flex shrink-0 items-center">
+        <HeaderLanguageButton compact={compact} onToggle={onLanguageToggle} />
+      </div>
+    </div>
+  );
 }
 
 export default function Header() {
   const [search, setSearch] = useState("");
-  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const { t } = useTranslation();
-  const { isFa } = useAppLocale();
   const { isAuthenticated: isUserLoggedIn } = useUserAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -140,7 +133,6 @@ export default function Header() {
     const q = search.trim();
     if (!q) return;
     navigate(`/products?search=${encodeURIComponent(q)}`);
-    setMobileSearchOpen(false);
   };
 
   const toggleLanguage = () => {
@@ -153,173 +145,66 @@ export default function Header() {
   };
 
   const handleLoginClick = () => {
-    if (isUserLoggedIn) {
-      navigate("/");
-      return;
-    }
-
     const returnPath = `${location.pathname}${location.search}`;
     navigate(buildLoginPath(returnPath));
-  };
-
-  const handleMobileSearchToggle = () => {
-    setMobileSearchOpen((open) => !open);
   };
 
   return (
     <header
       dir="ltr"
-      className="fixed inset-x-0 top-0 z-50 border-b border-gray-200 bg-white text-left"
+      className="fixed inset-x-0 top-0 z-50 overflow-visible border-b border-gray-200 bg-white text-left"
     >
       <div className="mx-auto max-w-6xl px-4 py-[0.7rem]">
         {/* Mobile */}
         <div className="flex items-center justify-between sm:hidden">
-          {isFa ? (
-            <>
-              <HeaderNavActions
-                compact
-                onLanguageToggle={toggleLanguage}
-                onLoginClick={handleLoginClick}
-                onCartClick={handleCartClick}
-              />
-              <button
-                type="button"
-                onClick={() => navigate("/")}
-                className="flex shrink-0 items-center"
-                aria-label={t("app.brand")}
-              >
-                <img
-                  src={brandLogo}
-                  alt={t("app.brand")}
-                  className="h-10 w-28 object-contain"
-                />
-              </button>
-              <button
-                type="button"
-                onClick={handleMobileSearchToggle}
-                className={iconBtnClass}
-                aria-label={t("search.button")}
-                aria-expanded={mobileSearchOpen}
-              >
-                <SearchIcon className={iconClass} aria-hidden />
-              </button>
-            </>
-          ) : (
-            <>
-              <button
-                type="button"
-                onClick={() => navigate("/")}
-                className="flex shrink-0 items-center"
-                aria-label={t("app.brand")}
-              >
-                <img
-                  src={brandLogo}
-                  alt={t("app.brand")}
-                  className="h-10 w-28 object-contain"
-                />
-              </button>
-              <div className="flex items-center gap-1">
-                <button
-                  type="button"
-                  onClick={handleMobileSearchToggle}
-                  className={iconBtnClass}
-                  aria-label={t("search.button")}
-                  aria-expanded={mobileSearchOpen}
-                >
-                  <SearchIcon className={iconClass} aria-hidden />
-                </button>
-                <HeaderNavActions
-                  compact
-                  onLanguageToggle={toggleLanguage}
-                  onLoginClick={handleLoginClick}
-                  onCartClick={handleCartClick}
-                />
-              </div>
-            </>
-          )}
+          <button
+            type="button"
+            onClick={() => navigate("/")}
+            className="flex shrink-0 items-center"
+            aria-label={t("app.brand")}
+          >
+            <img src={brandLogo} alt={t("app.brand")} className="h-10 w-28 object-contain" />
+          </button>
+
+          <HeaderRightSection compact onLanguageToggle={toggleLanguage}>
+            <HeaderSearchField
+              compact
+              value={search}
+              onChange={setSearch}
+              onSubmit={submitSearch}
+            />
+            <HeaderNavActions
+              compact
+              isUserLoggedIn={isUserLoggedIn}
+              onLoginClick={handleLoginClick}
+              onCartClick={handleCartClick}
+            />
+          </HeaderRightSection>
         </div>
 
-        {mobileSearchOpen && (
-          <div className="mt-2 flex gap-2 sm:hidden">
-            <input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder={t("search.placeholder")}
-              className={`min-w-0 flex-1 ${searchInputClass}`}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") submitSearch();
-              }}
-            />
-            <button
-              type="button"
-              onClick={submitSearch}
-              className={`${navBtnClass} w-10 px-0`}
-              aria-label={t("search.button")}
-            >
-              <SearchIcon className={iconClass} aria-hidden />
+        {/* Desktop: nav left | logo center | search + language right */}
+        <div className="hidden grid-cols-3 items-center sm:grid">
+          <HeaderNavActions
+            isUserLoggedIn={isUserLoggedIn}
+            onLoginClick={handleLoginClick}
+            onCartClick={handleCartClick}
+          />
+          <div className="flex justify-center">
+            <button type="button" onClick={() => navigate("/")} className="flex items-center">
+              <img
+                src={brandLogo}
+                alt={t("app.brand")}
+                className="h-[4.2rem] w-[12.6rem] object-contain sm:h-[4.9rem] sm:w-[19.6rem]"
+              />
             </button>
           </div>
-        )}
-
-        {/* Desktop */}
-        <div className="hidden grid-cols-3 items-center sm:grid">
-          {isFa ? (
-            <>
-              <HeaderNavActions
-                onLanguageToggle={toggleLanguage}
-                onLoginClick={handleLoginClick}
-                onCartClick={handleCartClick}
-              />
-              <div className="flex justify-center">
-                <button
-                  type="button"
-                  onClick={() => navigate("/")}
-                  className="flex items-center"
-                >
-                  <img
-                    src={brandLogo}
-                    alt={t("app.brand")}
-                    className="h-[4.2rem] w-[12.6rem] object-contain sm:h-[4.9rem] sm:w-[19.6rem]"
-                  />
-                </button>
-              </div>
-              <div className="flex items-center justify-end gap-2">
-                <HeaderSearch
-                  search={search}
-                  onSearchChange={setSearch}
-                  onSubmit={submitSearch}
-                />
-              </div>
-            </>
-          ) : (
-            <>
-              <div className="flex items-center justify-start gap-2">
-                <HeaderSearch
-                  search={search}
-                  onSearchChange={setSearch}
-                  onSubmit={submitSearch}
-                />
-              </div>
-              <div className="flex justify-center">
-                <button
-                  type="button"
-                  onClick={() => navigate("/")}
-                  className="flex items-center"
-                >
-                  <img
-                    src={brandLogo}
-                    alt={t("app.brand")}
-                    className="h-[4.2rem] w-[12.6rem] object-contain sm:h-[4.9rem] sm:w-[19.6rem]"
-                  />
-                </button>
-              </div>
-              <HeaderNavActions
-                onLanguageToggle={toggleLanguage}
-                onLoginClick={handleLoginClick}
-                onCartClick={handleCartClick}
-              />
-            </>
-          )}
+          <HeaderRightSection onLanguageToggle={toggleLanguage}>
+            <HeaderSearchField
+              value={search}
+              onChange={setSearch}
+              onSubmit={submitSearch}
+            />
+          </HeaderRightSection>
         </div>
       </div>
     </header>

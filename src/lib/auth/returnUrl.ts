@@ -19,3 +19,8 @@ export function buildLoginPath(returnPath: string): string {
   const safe = getSafeReturnUrl(returnPath);
   return `/login?returnUrl=${encodeURIComponent(safe)}`;
 }
+
+export function buildRegisterPath(returnPath: string): string {
+  const safe = getSafeReturnUrl(returnPath);
+  return `/register?returnUrl=${encodeURIComponent(safe)}`;
+}

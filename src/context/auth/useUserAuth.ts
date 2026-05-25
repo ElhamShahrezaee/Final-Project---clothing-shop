@@ -12,6 +12,7 @@ export function useUserAuth() {
     isLoading: context.isLoading,
     isAuthenticated: context.isUserAuthenticated,
     login: context.loginUser,
+    register: context.registerUser,
     logout: context.logoutUser,
   } as const;
 }

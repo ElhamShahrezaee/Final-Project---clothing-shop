@@ -5,6 +5,14 @@ export interface User {
   name: string;
   email: string;
   role: UserRole;
+  phone?: string;
+}
+
+export interface RegisterPayload {
+  name: string;
+  email: string;
+  password: string;
+  phone: string;
 }
 
 export interface LoginCredentials {

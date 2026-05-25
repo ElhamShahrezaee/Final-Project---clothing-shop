@@ -19,11 +19,42 @@
     "hidePassword": "مخفی کردن رمز عبور",
     "showPassword": "نمایش رمز عبور",
     "registerLink": "ثبت نام",
+    "registerTitle": "ثبت نام",
+    "registerSubtitle": "حساب کاربری جدید بسازید",
+    "name": "نام",
+    "phone": "شماره موبایل",
+    "confirmPassword": "تکرار رمز عبور",
+    "registerSubmit": "ثبت نام",
+    "registerSubmitting": "در حال ثبت نام...",
+    "registerError": "خطا در ثبت نام",
+    "hasAccount": "قبلاً ثبت نام کرده‌اید؟",
+    "defaultUser": "کاربر",
+    "welcomeMessage": "{{name}} عزیز، خوش آمدید",
+    "menuProfile": "مشاهده پروفایل",
+    "menuOrders": "سفارش‌ها",
+    "menuAddresses": "آدرس‌ها",
+    "menuLogout": "خروج",
     "noAdminAccess": "شما دسترسی ادمین ندارید",
-    "invalidRole": "نقش کاربر معتبر نیست"
+    "invalidRole": "نقش کاربر معتبر نیست",
+    "validation": {
+      "nameRequired": "نام الزامی است.",
+      "phoneRequired": "شماره موبایل الزامی است.",
+      "phoneInvalid": "شماره موبایل باید ۱۱ رقم باشد.",
+      "emailRequired": "ایمیل الزامی است.",
+      "passwordRequired": "رمز عبور الزامی است.",
+      "passwordRules": "رمز عبور باید حداقل ۸ کاراکتر و شامل یک حرف بزرگ و یک عدد باشد.",
+      "confirmPasswordRequired": "تکرار رمز عبور الزامی است.",
+      "passwordMismatch": "رمز عبور و تکرار آن یکسان نیستند."
+    },
+    "account": {
+      "profileTitle": "پروفایل",
+      "ordersTitle": "سفارش‌ها",
+      "addressesTitle": "آدرس‌ها",
+      "comingSoon": "به‌زودی..."
+    }
   },
   "search": {
-    "placeholder": "جستجو...",
+    "placeholder": "جستجو",
     "button": "جستجو"
   },
   "home": {

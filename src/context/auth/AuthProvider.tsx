@@ -2,7 +2,8 @@ import axios from "axios";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { getCurrentUser } from "../../features/auth/api/getMe";
 import { loginUser as loginApi } from "../../features/auth/api/login";
-import type { User } from "../../features/auth/types";
+import { registerUserApi } from "../../features/auth/api/register";
+import type { LoginData, RegisterPayload, User } from "../../features/auth/types";
 import {
   clearAuthSession,
   getStoredRefreshToken,
@@ -83,9 +84,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     return data.user;
   }, []);
 
-  const loginUser = useCallback(async (email: string, password: string) => {
-    const data = await loginApi({ email, password });
-
+  const applyStoreSession = useCallback((data: LoginData) => {
     if (data.user.role === "admin") {
       saveAuthSession("admin", data.token, data.refreshToken, data.user);
       setAdminUser(data.user);
@@ -100,6 +99,27 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     setStoreUser(data.user);
     return data.user;
   }, []);
+
+  const loginUser = useCallback(
+    async (email: string, password: string) => {
+      const data = await loginApi({ email, password });
+      return applyStoreSession(data);
+    },
+    [applyStoreSession],
+  );
+
+  const registerUser = useCallback(
+    async (payload: RegisterPayload) => {
+      const session = await registerUserApi(payload);
+
+      if (session) {
+        return applyStoreSession(session);
+      }
+
+      return loginUser(payload.email, payload.password);
+    },
+    [applyStoreSession, loginUser],
+  );
 
   const logoutAdmin = useCallback(() => {
     clearAuthSession("admin");
@@ -132,6 +152,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
       isAdmin: adminUser?.role === "admin",
       loginAdmin,
       loginUser,
+      registerUser,
       login,
       logoutAdmin,
       logoutUser,
@@ -143,6 +164,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
       isLoading,
       loginAdmin,
       loginUser,
+      registerUser,
       login,
       logoutAdmin,
       logoutUser,
