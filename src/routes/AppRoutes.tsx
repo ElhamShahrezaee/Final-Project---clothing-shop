@@ -16,6 +16,9 @@ import AdminLoginRoute from "./AdminLoginRoute";
 import UserLoginRoute from "./UserLoginRoute";
 import RegisterRoute from "./RegisterRoute";
 import AccountPlaceholder from "../pages/Account/AccountPlaceholder";
+import ProfilePage from "../pages/Account/Profile/ProfilePage";
+import AddressPage from "../pages/Account/Address/AddressPage";
+import UserProtectedRoute from "./UserProtectedRoute";
 
 const AppRoutes = () => {
   return (
@@ -30,17 +33,13 @@ const AppRoutes = () => {
           element={<AccountPlaceholder titleKey="cart.checkoutTitle" />}
         />
         <Route path="/checkout/address" element={<AddressSelectionPlaceholder />} />
-        <Route
-          path="/account/profile"
-          element={<AccountPlaceholder titleKey="auth.account.profileTitle" />}
-        />
+        <Route element={<UserProtectedRoute />}>
+          <Route path="/account/profile" element={<ProfilePage />} />
+          <Route path="/account/addresses" element={<AddressPage />} />
+        </Route>
         <Route
           path="/account/orders"
           element={<AccountPlaceholder titleKey="auth.account.ordersTitle" />}
-        />
-        <Route
-          path="/account/addresses"
-          element={<AccountPlaceholder titleKey="auth.account.addressesTitle" />}
         />
       </Route>
 

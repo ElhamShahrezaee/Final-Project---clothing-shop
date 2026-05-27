@@ -32,7 +32,7 @@
     "welcomeMessage": "{{name}} عزیز، خوش آمدید",
     "menuProfile": "مشاهده پروفایل",
     "menuOrders": "سفارش‌ها",
-    "menuAddresses": "آدرس‌ها",
+    "menuAddresses": "آدرس",
     "menuLogout": "خروج",
     "noAdminAccess": "شما دسترسی ادمین ندارید",
     "invalidRole": "نقش کاربر معتبر نیست",
@@ -49,8 +49,55 @@
     "account": {
       "profileTitle": "پروفایل",
       "ordersTitle": "سفارش‌ها",
-      "addressesTitle": "آدرس‌ها",
+      "addressesTitle": "آدرس",
       "comingSoon": "به‌زودی..."
+    }
+  },
+  "profile": {
+    "title": "پروفایل",
+    "sections": {
+      "info": "اطلاعات حساب",
+      "infoHint": "میتوانید نام و شماره موبایل خود را ویرایش کنید.",
+      "password": "تغییر رمز عبور",
+      "passwordHint": "رمز فعلی و رمز جدید را وارد کنید."
+    },
+    "addressLabel": "آدرس کامل",
+    "currentPassword": "رمز عبور فعلی",
+    "newPassword": "رمز عبور جدید",
+    "confirmNewPassword": "تکرار رمز عبور جدید",
+    "saveProfile": "ذخیره اطلاعات",
+    "changePassword": "تغییر رمز عبور",
+    "saving": "در حال ذخیره...",
+    "changingPassword": "در حال تغییر...",
+    "retry": "تلاش مجدد",
+    "validation": {
+      "currentPasswordRequired": "رمز عبور فعلی الزامی است."
+    },
+    "error": {
+      "load": "خطا در بارگذاری پروفایل",
+      "updateProfile": "خطا در بروزرسانی پروفایل",
+      "updatePassword": "خطا در تغییر رمز عبور"
+    },
+    "toast": {
+      "profileSaved": "اطلاعات پروفایل ذخیره شد",
+      "passwordSaved": "رمز عبور با موفقیت تغییر کرد"
+    }
+  },
+  "address": {
+    "title": "آدرس",
+    "label": "آدرس کامل",
+    "save": "ذخیره آدرس",
+    "saving": "در حال ذخیره...",
+    "retry": "تلاش مجدد",
+    "validation": {
+      "required": "آدرس الزامی است."
+    },
+    "error": {
+      "load": "خطا در بارگذاری آدرس",
+      "update": "خطا در بروزرسانی آدرس"
+    },
+    "toast": {
+      "saved": "آدرس ذخیره شد"
     }
   },
   "search": {

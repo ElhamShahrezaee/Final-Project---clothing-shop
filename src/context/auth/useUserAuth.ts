@@ -14,5 +14,6 @@ export function useUserAuth() {
     login: context.loginUser,
     register: context.registerUser,
     logout: context.logoutUser,
+    syncStoreUser: context.syncStoreUser,
   } as const;
 }

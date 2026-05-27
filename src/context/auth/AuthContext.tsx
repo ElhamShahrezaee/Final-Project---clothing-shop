@@ -20,6 +20,7 @@ export interface AuthContextValue {
   login: (email: string, password: string) => Promise<void>;
   logoutAdmin: () => void;
   logoutUser: () => void;
+  syncStoreUser: (user: User) => void;
   /** @deprecated Admin panel */
   logout: () => void;
 }

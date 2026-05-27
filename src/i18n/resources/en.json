@@ -32,7 +32,7 @@
     "welcomeMessage": "Welcome, dear {{name}}",
     "menuProfile": "View profile",
     "menuOrders": "Orders",
-    "menuAddresses": "Addresses",
+    "menuAddresses": "Address",
     "menuLogout": "Log out",
     "noAdminAccess": "You do not have admin access",
     "invalidRole": "Invalid user role",
@@ -49,8 +49,55 @@
     "account": {
       "profileTitle": "Profile",
       "ordersTitle": "Orders",
-      "addressesTitle": "Addresses",
+      "addressesTitle": "Address",
       "comingSoon": "Coming soon..."
+    }
+  },
+  "profile": {
+    "title": "Profile",
+    "sections": {
+      "info": "Account details",
+      "infoHint": "You can edit your name and mobile number.",
+      "password": "Change password",
+      "passwordHint": "Enter your current and new password."
+    },
+    "currentPassword": "Current password",
+    "newPassword": "New password",
+    "confirmNewPassword": "Confirm new password",
+    "saveProfile": "Save details",
+    "changePassword": "Change password",
+    "saving": "Saving...",
+    "changingPassword": "Updating...",
+    "retry": "Try again",
+    "validation": {
+      "addressRequired": "Address is required.",
+      "currentPasswordRequired": "Current password is required."
+    },
+    "error": {
+      "load": "Failed to load profile",
+      "updateProfile": "Failed to update profile",
+      "updatePassword": "Failed to change password"
+    },
+    "toast": {
+      "profileSaved": "Profile saved",
+      "passwordSaved": "Password updated successfully"
+    }
+  },
+  "address": {
+    "title": "Address",
+    "label": "Full address",
+    "save": "Save address",
+    "saving": "Saving...",
+    "retry": "Try again",
+    "validation": {
+      "required": "Address is required."
+    },
+    "error": {
+      "load": "Failed to load address",
+      "update": "Failed to update address"
+    },
+    "toast": {
+      "saved": "Address saved"
     }
   },
   "search": {

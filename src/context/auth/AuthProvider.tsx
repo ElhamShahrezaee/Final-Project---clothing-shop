@@ -137,6 +137,15 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     setStoreUser(null);
   }, []);
 
+  const syncStoreUser = useCallback((user: User) => {
+    const token = getStoredToken("user");
+    const refreshToken = getStoredRefreshToken("user");
+    if (!token || !refreshToken) return;
+
+    setStoreUser(user);
+    saveAuthSession("user", token, refreshToken, user);
+  }, []);
+
   const login = useCallback(
     async (email: string, password: string) => {
       await loginAdmin(email, password);
@@ -162,6 +171,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
       login,
       logoutAdmin,
       logoutUser,
+      syncStoreUser,
       logout,
     }),
     [
@@ -174,6 +184,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
       login,
       logoutAdmin,
       logoutUser,
+      syncStoreUser,
       logout,
     ],
   );
