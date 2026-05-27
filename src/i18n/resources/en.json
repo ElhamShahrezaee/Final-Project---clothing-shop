@@ -57,6 +57,30 @@
     "placeholder": "Search",
     "button": "Search"
   },
+  "cart": {
+    "checkoutTitle": "Checkout",
+    "miniCart": {
+      "title": "Cart",
+      "empty": "Your cart is empty",
+      "total": "Total",
+      "checkout": "Checkout",
+      "close": "Close",
+      "clear": "Clear cart"
+    },
+    "addressSelectionTitle": "Select address",
+    "page": {
+      "title": "Shopping cart",
+      "empty": "Your cart is empty",
+      "loadError": "Failed to load cart",
+      "continueShopping": "Browse products",
+      "unitPrice": "Unit price",
+      "lineTotal": "Subtotal",
+      "grandTotal": "Grand total",
+      "confirmCheckout": "Confirm and checkout",
+      "noImage": "No image",
+      "retry": "Try again"
+    }
+  },
   "home": {
     "heroTitle": "AUTUMN / WINTER",
     "heroSubtitle": "Luxury fashion collection 2026",
@@ -91,7 +115,9 @@
     "reviewUser": "Site user",
     "reviewDate": "Date 2026/1/1",
     "reviewBody": "This is a great product. I recommend buying it!",
-    "noReviews": "No reviews yet."
+    "noReviews": "No reviews yet.",
+    "increaseQuantity": "Increase quantity",
+    "decreaseQuantity": "Decrease quantity"
   },
   "errors": {
     "notFound": "404 - Page Not Found"

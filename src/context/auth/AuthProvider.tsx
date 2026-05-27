@@ -12,6 +12,7 @@ import {
   migrateLegacyAdminTokens,
   saveAuthSession,
 } from "../../features/auth/storage";
+import { mergeGuestCartOnLogin } from "../../features/cart/utils/mergeGuestCartOnLogin";
 import { AuthContext } from "./AuthContext";
 
 function isUnauthorizedError(error: unknown): boolean {
@@ -84,7 +85,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     return data.user;
   }, []);
 
-  const applyStoreSession = useCallback((data: LoginData) => {
+  const applyStoreSession = useCallback(async (data: LoginData) => {
     if (data.user.role === "admin") {
       saveAuthSession("admin", data.token, data.refreshToken, data.user);
       setAdminUser(data.user);
@@ -97,6 +98,11 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
 
     saveAuthSession("user", data.token, data.refreshToken, data.user);
     setStoreUser(data.user);
+    try {
+      await mergeGuestCartOnLogin();
+    } catch {
+      // keep login successful even if cart merge fails
+    }
     return data.user;
   }, []);
 

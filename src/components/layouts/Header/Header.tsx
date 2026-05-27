@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import LanguageIcon from "@mui/icons-material/Language";
@@ -7,22 +7,24 @@ import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import i18n from "../../../i18n";
 import { useUserAuth } from "../../../context/auth/useUserAuth";
 import { buildLoginPath } from "../../../lib/auth/returnUrl";
+import { useCartQuery } from "../../../features/cart/queries/useCartQuery";
+import { getCartUniqueItemsCount } from "../../../features/cart/utils/cartSelectors";
+import { formatCount } from "../../../lib/formatCount";
+import { useAppLocale } from "../../../hooks/useAppLocale";
 import brandLogo from "../../../assets/images/Logo-ELISHA-STOR.svg.png";
 import HeaderSearchField from "./HeaderSearchField";
 import HeaderUserMenu from "./HeaderUserMenu";
+import MiniCartPopover from "./MiniCartPopover";
 import {
   headerIconBtnClass,
   headerIconClass,
   headerOutlinedBtnClass,
+  headerPlainBtnClass,
 } from "./headerNavStyles";
 
 const iconClass = headerIconClass;
 const iconBtnClass = headerIconBtnClass;
-
-/** Fixed text slot so the cart icon never shifts when language changes */
-const cartTextSlotClass = "w-[4.75rem] shrink-0 truncate text-start";
-const cartBtnWidthClass =
-  "h-10 w-[7.5rem] min-w-[7.5rem] max-w-[7.5rem] shrink-0 !justify-start !gap-0.5";
+const cartBtnClass = `${headerPlainBtnClass} justify-start gap-1.5`;
 
 type HeaderLanguageButtonProps = {
   compact?: boolean;
@@ -65,16 +67,51 @@ function HeaderNavActions({
   onCartClick,
 }: HeaderNavActionsProps) {
   const { t } = useTranslation();
+  const { isFa } = useAppLocale();
+  const { data: cart } = useCartQuery();
+  const totalQty = getCartUniqueItemsCount(cart);
+  const [miniOpen, setMiniOpen] = useState(false);
+  const location = useLocation();
+  const closeTimeoutRef = useRef<number | null>(null);
+
+  const shouldForceMiniOpen = new URLSearchParams(location.search).get("cart") === "1";
+  useEffect(() => {
+    if (!compact && shouldForceMiniOpen) setMiniOpen(true);
+  }, [compact, shouldForceMiniOpen]);
+
+  const cartIcon = (
+    <span className="relative inline-flex items-center justify-center">
+      {totalQty > 0 ? (
+        <span className="absolute bottom-full left-1/2 z-0 inline-flex h-5 min-w-5 -translate-x-1/2 translate-y-2 items-center justify-center rounded-full bg-red-600 px-1 text-[11px] font-semibold text-white">
+          {formatCount(totalQty, isFa)}
+        </span>
+      ) : null}
+      <ShoppingCartOutlinedIcon className={`${iconClass} relative z-10`} aria-hidden />
+    </span>
+  );
 
   const cartButton = compact ? (
     <button type="button" onClick={onCartClick} className={iconBtnClass} aria-label={t("nav.cart")}>
-      <ShoppingCartOutlinedIcon className={iconClass} aria-hidden />
+      {cartIcon}
     </button>
   ) : (
-    <button type="button" onClick={onCartClick} className={`${headerOutlinedBtnClass} ${cartBtnWidthClass}`}>
-      <ShoppingCartOutlinedIcon className={iconClass} aria-hidden />
-      <span className={cartTextSlotClass}>{t("nav.cart")}</span>
-    </button>
+    <div
+      className="relative"
+      onMouseEnter={() => {
+        if (closeTimeoutRef.current) window.clearTimeout(closeTimeoutRef.current);
+        setMiniOpen(true);
+      }}
+      onMouseLeave={() => {
+        if (closeTimeoutRef.current) window.clearTimeout(closeTimeoutRef.current);
+        closeTimeoutRef.current = window.setTimeout(() => setMiniOpen(false), 500);
+      }}
+    >
+      <button type="button" onClick={onCartClick} className={cartBtnClass}>
+        {cartIcon}
+        <span className="truncate">{t("nav.cart")}</span>
+      </button>
+      {totalQty > 0 ? <MiniCartPopover open={miniOpen} onClose={() => setMiniOpen(false)} /> : null}
+    </div>
   );
 
   const loginButton = compact ? (
@@ -82,7 +119,7 @@ function HeaderNavActions({
       <PersonOutlinedIcon className={iconClass} aria-hidden />
     </button>
   ) : (
-    <button type="button" onClick={onLoginClick} className={`${headerOutlinedBtnClass} w-[9rem]`}>
+    <button type="button" onClick={onLoginClick} className={headerPlainBtnClass}>
       <PersonOutlinedIcon className={iconClass} aria-hidden />
       <span className="truncate">{t("nav.login")}</span>
     </button>

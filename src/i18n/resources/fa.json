@@ -57,6 +57,30 @@
     "placeholder": "جستجو",
     "button": "جستجو"
   },
+  "cart": {
+    "checkoutTitle": "ثبت سفارش",
+    "miniCart": {
+      "title": "سبد خرید",
+      "empty": "سبد خرید خالی است",
+      "total": "جمع کل",
+      "checkout": "ثبت سفارش",
+      "close": "بستن",
+      "clear": "پاک کردن سبد خرید"
+    },
+    "addressSelectionTitle": "انتخاب آدرس",
+    "page": {
+      "title": "سبد خرید",
+      "empty": "سبد خرید شما خالی است",
+      "loadError": "خطا در بارگذاری سبد خرید",
+      "continueShopping": "مشاهده محصولات",
+      "unitPrice": "قیمت واحد",
+      "lineTotal": "جمع",
+      "grandTotal": "مجموع کل",
+      "confirmCheckout": "تایید و ثبت سفارش",
+      "noImage": "بدون تصویر",
+      "retry": "تلاش مجدد"
+    }
+  },
   "home": {
     "heroTitle": "پاییز / زمستان",
     "heroSubtitle": "کالکشن لوکس ۲۰۲۶",
@@ -91,7 +115,9 @@
     "reviewUser": "کاربر سایت",
     "reviewDate": "تاریخ 05/1/1",
     "reviewBody": "خیلی محصول خوبیه، پیشنهاد میکنم بخریدش!",
-    "noReviews": "هنوز نظری ثبت نشده است."
+    "noReviews": "هنوز نظری ثبت نشده است.",
+    "increaseQuantity": "افزایش تعداد",
+    "decreaseQuantity": "کاهش تعداد"
   },
   "errors": {
     "notFound": "۴۰۴ - صفحه پیدا نشد"

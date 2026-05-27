@@ -9,7 +9,7 @@ import { useAppLocale } from "../../../hooks/useAppLocale";
 import {
   headerIconBtnClass,
   headerIconClass,
-  headerOutlinedBtnClass,
+  headerPlainBtnClass,
 } from "./headerNavStyles";
 
 const iconBtnClass = headerIconBtnClass;
@@ -35,7 +35,7 @@ export default function HeaderUserMenu({ compact }: HeaderUserMenuProps) {
   const [menuPosition, setMenuPosition] = useState<MenuPosition | null>(null);
   const rootRef = useRef<HTMLDivElement>(null);
 
-  const displayName = getUserDisplayName(user?.name, t("auth.defaultUser"), 10);
+  const displayName = getUserDisplayName(user?.name, t("auth.defaultUser"), 25);
 
   const updateMenuPosition = () => {
     const el = rootRef.current;
@@ -107,7 +107,7 @@ export default function HeaderUserMenu({ compact }: HeaderUserMenuProps) {
 
   const triggerClass = compact
     ? `${iconBtnClass} max-w-[2.75rem]`
-    : `${headerOutlinedBtnClass} min-w-[5.5rem] max-w-[7.5rem]`;
+    : `${headerPlainBtnClass} max-w-[12rem]`;
 
   const menuItemAlign = isFa ? "text-right" : "text-left";
 

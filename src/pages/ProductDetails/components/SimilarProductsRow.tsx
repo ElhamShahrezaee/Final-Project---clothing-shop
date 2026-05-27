@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import ProductCard from "../../../components/product/ProductCard/ProductCard";
+import ProductCardsSwiper from "../../../components/product/ProductCardsSwiper/ProductCardsSwiper";
 import { useSimilarProductsQuery } from "../../../features/products/queries/useSimilarProductsQuery";
 import { useAppLocale } from "../../../hooks/useAppLocale";
 
@@ -25,14 +26,12 @@ export default function SimilarProductsRow({ category, excludeId }: SimilarProdu
         {t("productDetails.similarTitle")}
       </h2>
 
-      <div className="flex w-full max-w-6xl justify-center">
-        <div className="flex max-w-full justify-center gap-0 overflow-x-auto pb-4">
+      <div className="flex w-full justify-center">
+        <ProductCardsSwiper>
           {products.map((product) => (
-            <div key={product.id} className="w-64 shrink-0 sm:w-72">
-              <ProductCard product={product} />
-            </div>
+            <ProductCard key={product.id} product={product} />
           ))}
-        </div>
+        </ProductCardsSwiper>
       </div>
     </section>
   );

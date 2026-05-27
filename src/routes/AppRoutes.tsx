@@ -4,6 +4,7 @@ import MainLayout from "../components/layouts/MainLayout";
 import Products from "../pages/Products/Products";
 import ProductDetails from "../pages/ProductDetails/ProductDetails";
 import Cart from "../pages/Cart/Cart";
+import AddressSelectionPlaceholder from "../pages/Checkout/AddressSelectionPlaceholder";
 import NotFound from "../pages/NotFound/NotFound";
 import AdminLayout from "../components/layouts/AdminLayout";
 import AdminDashboard from "../pages/Admin/Dashboard/AdminDashboard";
@@ -24,6 +25,11 @@ const AppRoutes = () => {
         <Route path="/products" element={<Products />} />
         <Route path="/products/:id" element={<ProductDetails />} />
         <Route path="/cart" element={<Cart />} />
+        <Route
+          path="/checkout"
+          element={<AccountPlaceholder titleKey="cart.checkoutTitle" />}
+        />
+        <Route path="/checkout/address" element={<AddressSelectionPlaceholder />} />
         <Route
           path="/account/profile"
           element={<AccountPlaceholder titleKey="auth.account.profileTitle" />}
