@@ -1,18 +1,12 @@
 import { apiClient } from "../../../lib/api/client";
 import { mapCart, type RawCart } from "./mapCart";
+import { EMPTY_CART } from "../constants";
 import type { Cart } from "../types";
 
 type GetCartResponse = {
   success: boolean;
   data?: unknown;
   message?: string;
-};
-
-const emptyCart: Cart = {
-  id: "",
-  user: "",
-  items: [],
-  totalPrice: 0,
 };
 
 export async function getCart(): Promise<Cart> {
@@ -24,7 +18,7 @@ export async function getCart(): Promise<Cart> {
 
   const raw = res.data.data;
   if (!raw || typeof raw !== "object") {
-    return emptyCart;
+    return EMPTY_CART;
   }
 
   return mapCart(raw as RawCart);

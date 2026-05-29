@@ -6,6 +6,9 @@ import ProductDetails from "../pages/ProductDetails/ProductDetails";
 import Cart from "../pages/Cart/Cart";
 import CheckoutAddressPage from "../pages/Checkout/CheckoutAddressPage";
 import CheckoutReviewPage from "../pages/Checkout/CheckoutReviewPage";
+import CheckoutPaymentMethodPage from "../pages/Checkout/CheckoutPaymentMethodPage";
+import CheckoutCardPaymentPage from "../pages/Checkout/CheckoutCardPaymentPage";
+import CheckoutPaymentResultPage from "../pages/Checkout/CheckoutPaymentResultPage";
 import NotFound from "../pages/NotFound/NotFound";
 import AdminLayout from "../components/layouts/AdminLayout";
 import AdminDashboard from "../pages/Admin/Dashboard/AdminDashboard";
@@ -36,9 +39,15 @@ const AppRoutes = () => {
         <Route element={<UserProtectedRoute />}>
           <Route path="/checkout/address" element={<CheckoutAddressPage />} />
           <Route path="/checkout/review" element={<CheckoutReviewPage />} />
+          <Route path="/checkout/payment" element={<CheckoutPaymentMethodPage />} />
+          <Route path="/checkout/payment/card" element={<CheckoutCardPaymentPage />} />
           <Route
-            path="/checkout/payment"
-            element={<AccountPlaceholder titleKey="cart.checkout.paymentTitle" />}
+            path="/checkout/result/success"
+            element={<CheckoutPaymentResultPage status="success" />}
+          />
+          <Route
+            path="/checkout/result/failure"
+            element={<CheckoutPaymentResultPage status="failure" />}
           />
           <Route path="/account/profile" element={<ProfilePage />} />
           <Route path="/account/addresses" element={<AddressPage />} />

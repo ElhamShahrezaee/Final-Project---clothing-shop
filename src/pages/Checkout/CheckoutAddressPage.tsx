@@ -2,9 +2,10 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Spinner from "../../components/common/Spinner/Spinner";
+import ShippingAddressSelector from "../../components/checkout/ShippingAddressSelector";
 import { useCartQuery } from "../../features/cart/queries/useCartQuery";
+import { useCheckoutShippingReady } from "../../features/checkout/hooks/useCheckoutShippingReady";
 import { useAppLocale } from "../../hooks/useAppLocale";
-import AddressSection, { useCheckoutAddressReady } from "../../components/address/AddressSection";
 import CheckoutSummaryAside from "./components/CheckoutSummaryAside";
 
 export default function CheckoutAddressPage() {
@@ -12,7 +13,7 @@ export default function CheckoutAddressPage() {
   const navigate = useNavigate();
   const { isFa, dir, textAlign } = useAppLocale();
   const { data: cart, isPending: isCartPending } = useCartQuery();
-  const { isReady, isPending: isAddressPending } = useCheckoutAddressReady();
+  const { isReady, isPending: isAddressPending } = useCheckoutShippingReady();
   const [addressError, setAddressError] = useState<string | null>(null);
 
   const totalPrice = cart?.totalPrice ?? 0;
@@ -43,7 +44,7 @@ export default function CheckoutAddressPage() {
 
       <div className="grid gap-8 lg:grid-cols-[1fr_20rem] lg:items-start">
         <div className="min-w-0 space-y-4">
-          <AddressSection onAddressSaved={() => setAddressError(null)} />
+          <ShippingAddressSelector onSelectionChange={() => setAddressError(null)} />
           {addressError ? (
             <p className="text-sm text-red-600" role="alert">
               {addressError}

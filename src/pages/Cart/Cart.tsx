@@ -73,12 +73,15 @@ export default function Cart() {
   }
 
   return (
-    <div dir={dir} className={`mx-auto max-w-6xl px-4 py-8 sm:py-10 ${textAlign}`}>
+    <div
+      dir={dir}
+      className={`mx-auto w-full min-w-0 max-w-6xl overflow-x-hidden px-4 py-8 sm:py-10 ${textAlign}`}
+    >
       <h1 className="mb-8 text-center text-2xl font-semibold tracking-wide text-gray-900 sm:text-3xl">
         {t("cart.page.title")}
       </h1>
 
-      <div className="grid gap-8 lg:grid-cols-[1fr_20rem] lg:items-start">
+      <div className="grid min-w-0 gap-8 lg:grid-cols-[1fr_20rem] lg:items-start">
         <section className="min-w-0 rounded-xl border border-gray-200 bg-white px-5 sm:px-8">
           {items.map((item) => (
             <CartItemRow

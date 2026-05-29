@@ -2,16 +2,33 @@
 @tailwind components;
 @tailwind utilities;
 
-html,
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  width: 100%;
+  overflow-x: hidden;
+}
+
 body,
 #root {
   margin: 0;
   padding: 0;
-  max-width: 100%;
+  width: 100%;
+  min-width: 0;
+  max-width: 100vw;
   overflow-x: hidden;
 }
 
 body {
   font-family: system-ui, sans-serif;
   direction: ltr;
+}
+
+img,
+video {
+  max-width: 100%;
 }

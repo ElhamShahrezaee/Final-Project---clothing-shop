@@ -71,13 +71,17 @@ function HeaderNavActions({
   const { data: cart } = useCartQuery();
   const totalQty = getCartUniqueItemsCount(cart);
   const [miniOpen, setMiniOpen] = useState(false);
+  const cartAnchorRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
   const closeTimeoutRef = useRef<number | null>(null);
 
-  const shouldForceMiniOpen = new URLSearchParams(location.search).get("cart") === "1";
+  const isCheckoutResult = location.pathname.startsWith("/checkout/result");
+  const shouldForceMiniOpen =
+    !isCheckoutResult && new URLSearchParams(location.search).get("cart") === "1";
   useEffect(() => {
     if (!compact && shouldForceMiniOpen) setMiniOpen(true);
-  }, [compact, shouldForceMiniOpen]);
+    if (isCheckoutResult) setMiniOpen(false);
+  }, [compact, shouldForceMiniOpen, isCheckoutResult]);
 
   const cartIcon = (
     <span className="relative inline-flex items-center justify-center">
@@ -90,18 +94,32 @@ function HeaderNavActions({
     </span>
   );
 
+  const cancelMiniCartClose = () => {
+    if (closeTimeoutRef.current) window.clearTimeout(closeTimeoutRef.current);
+  };
+
+  const scheduleMiniCartClose = () => {
+    if (closeTimeoutRef.current) window.clearTimeout(closeTimeoutRef.current);
+    closeTimeoutRef.current = window.setTimeout(() => setMiniOpen(false), 500);
+  };
+
   const cartButton = compact ? (
     <button type="button" onClick={onCartClick} className={iconBtnClass} aria-label={t("nav.cart")}>
       {cartIcon}
     </button>
   ) : (
     <div
+      ref={cartAnchorRef}
       className="relative"
       onMouseEnter={() => {
         if (closeTimeoutRef.current) window.clearTimeout(closeTimeoutRef.current);
         setMiniOpen(true);
       }}
-      onMouseLeave={() => {
+      onMouseLeave={(e) => {
+        const next = e.relatedTarget;
+        if (next instanceof Node && (e.currentTarget.contains(next) || (next instanceof HTMLElement && next.closest("[data-mini-cart-popover]")))) {
+          return;
+        }
         if (closeTimeoutRef.current) window.clearTimeout(closeTimeoutRef.current);
         closeTimeoutRef.current = window.setTimeout(() => setMiniOpen(false), 500);
       }}
@@ -110,7 +128,15 @@ function HeaderNavActions({
         {cartIcon}
         <span className="truncate">{t("nav.cart")}</span>
       </button>
-      {totalQty > 0 ? <MiniCartPopover open={miniOpen} onClose={() => setMiniOpen(false)} /> : null}
+      {totalQty > 0 ? (
+        <MiniCartPopover
+          open={miniOpen}
+          onClose={() => setMiniOpen(false)}
+          anchorRef={cartAnchorRef}
+          onPopoverMouseEnter={cancelMiniCartClose}
+          onPopoverMouseLeave={scheduleMiniCartClose}
+        />
+      ) : null}
     </div>
   );
 
@@ -189,18 +215,22 @@ export default function Header() {
   return (
     <header
       dir="ltr"
-      className="fixed inset-x-0 top-0 z-50 overflow-visible border-b border-gray-200 bg-white text-left"
+      className="fixed inset-x-0 top-0 z-[100] overflow-visible border-b border-gray-200 bg-white text-left"
     >
-      <div className="mx-auto max-w-6xl px-4 py-[0.7rem]">
+      <div className="mx-auto w-full min-w-0 max-w-6xl px-3 py-[0.7rem] sm:px-4">
         {/* Mobile */}
-        <div className="flex items-center justify-between sm:hidden">
+        <div className="flex min-w-0 items-center justify-between gap-1 sm:hidden">
           <button
             type="button"
             onClick={() => navigate("/")}
             className="flex shrink-0 items-center"
             aria-label={t("app.brand")}
           >
-            <img src={brandLogo} alt={t("app.brand")} className="h-10 w-28 object-contain" />
+            <img
+              src={brandLogo}
+              alt={t("app.brand")}
+              className="h-10 w-[6.5rem] max-w-[40vw] object-contain"
+            />
           </button>
 
           <HeaderRightSection compact onLanguageToggle={toggleLanguage}>
