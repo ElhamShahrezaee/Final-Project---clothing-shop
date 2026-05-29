@@ -158,7 +158,7 @@ function HeaderNavActions({
   );
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex shrink-0 items-center gap-0.5 sm:gap-2">
       {userOrLogin}
       {cartButton}
     </div>
@@ -174,9 +174,9 @@ type HeaderRightSectionProps = {
 /** Right side of header: main actions in one div, language toggle in a separate div. */
 function HeaderRightSection({ compact, onLanguageToggle, children }: HeaderRightSectionProps) {
   return (
-    <div className="flex items-center justify-end gap-2">
+    <div className="flex min-w-0 shrink-0 items-center justify-end gap-1 sm:gap-2">
       {children ? (
-        <div className="flex items-center gap-1 sm:gap-2">{children}</div>
+        <div className="flex min-w-0 items-center gap-0.5 sm:gap-2">{children}</div>
       ) : null}
       <div className="flex shrink-0 items-center">
         <HeaderLanguageButton compact={compact} onToggle={onLanguageToggle} />
@@ -187,10 +187,15 @@ function HeaderRightSection({ compact, onLanguageToggle, children }: HeaderRight
 
 export default function Header() {
   const [search, setSearch] = useState("");
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const { t } = useTranslation();
   const { isAuthenticated: isUserLoggedIn } = useUserAuth();
   const navigate = useNavigate();
   const location = useLocation();
+
+  useEffect(() => {
+    setMobileSearchOpen(false);
+  }, [location.pathname]);
 
   const submitSearch = () => {
     const q = search.trim();
@@ -215,39 +220,61 @@ export default function Header() {
   return (
     <header
       dir="ltr"
-      className="fixed inset-x-0 top-0 z-[100] overflow-visible border-b border-gray-200 bg-white text-left"
+      className="fixed inset-x-0 top-0 z-[100] overflow-x-hidden border-b border-gray-200 bg-white text-left"
     >
       <div className="mx-auto w-full min-w-0 max-w-6xl px-3 py-[0.7rem] sm:px-4">
-        {/* Mobile */}
-        <div className="flex min-w-0 items-center justify-between gap-1 sm:hidden">
-          <button
-            type="button"
-            onClick={() => navigate("/")}
-            className="flex shrink-0 items-center"
-            aria-label={t("app.brand")}
-          >
-            <img
-              src={brandLogo}
-              alt={t("app.brand")}
-              className="h-10 w-[6.5rem] max-w-[40vw] object-contain"
-            />
-          </button>
-
-          <HeaderRightSection compact onLanguageToggle={toggleLanguage}>
-            <HeaderSearchField
-              compact
-              value={search}
-              onChange={setSearch}
-              onSubmit={submitSearch}
-            />
+        {/* Mobile: nav left | logo center | search + language right (language outermost) */}
+        <div className="grid min-w-0 grid-cols-3 items-center gap-1 sm:hidden">
+          <div className="flex min-w-0 items-center justify-start">
             <HeaderNavActions
               compact
               isUserLoggedIn={isUserLoggedIn}
               onLoginClick={handleLoginClick}
               onCartClick={handleCartClick}
             />
-          </HeaderRightSection>
+          </div>
+
+          <div className="flex min-w-0 justify-center px-1">
+            <button
+              type="button"
+              onClick={() => navigate("/")}
+              className="flex max-w-full items-center justify-center"
+              aria-label={t("app.brand")}
+            >
+              <img
+                src={brandLogo}
+                alt={t("app.brand")}
+                className="h-9 w-auto max-w-full object-contain"
+              />
+            </button>
+          </div>
+
+          <div className="flex items-center justify-end gap-0.5">
+            <HeaderSearchField
+              iconOnly
+              iconActive={mobileSearchOpen}
+              value={search}
+              onChange={setSearch}
+              onSubmit={submitSearch}
+              onIconClick={() => setMobileSearchOpen((open) => !open)}
+            />
+            <HeaderLanguageButton compact onToggle={toggleLanguage} />
+          </div>
         </div>
+
+        {mobileSearchOpen ? (
+          <div className="mt-2 min-w-0 border-t border-gray-100 pt-2 sm:hidden">
+            <HeaderSearchField
+              fullWidth
+              value={search}
+              onChange={setSearch}
+              onSubmit={() => {
+                submitSearch();
+                setMobileSearchOpen(false);
+              }}
+            />
+          </div>
+        ) : null}
 
         {/* Desktop: nav left | logo center | search + language right */}
         <div className="hidden grid-cols-3 items-center sm:grid">

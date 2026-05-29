@@ -13,7 +13,7 @@ const MainLayout = () => {
     >
       <Header />
 
-      <main className="w-full min-w-0 flex-1 overflow-x-hidden pb-0 pt-[4.75rem] sm:pt-[6.5rem]">
+      <main className="w-full min-w-0 flex-1 overflow-x-hidden pb-0 pt-[4.5rem] sm:pt-[6.5rem]">
         <Outlet />
       </main>
 

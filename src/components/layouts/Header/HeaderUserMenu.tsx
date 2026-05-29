@@ -21,9 +21,11 @@ type HeaderUserMenuProps = {
 
 type MenuPosition = {
   top: number;
-  left?: number;
-  right?: number;
+  left: number;
 };
+
+const MENU_MIN_WIDTH = 176;
+const VIEWPORT_PADDING = 8;
 
 export default function HeaderUserMenu({ compact }: HeaderUserMenuProps) {
   const { t } = useTranslation();
@@ -43,12 +45,12 @@ export default function HeaderUserMenu({ compact }: HeaderUserMenuProps) {
 
     const rect = el.getBoundingClientRect();
     const gap = 8;
+    const maxLeft = window.innerWidth - MENU_MIN_WIDTH - VIEWPORT_PADDING;
 
-    setMenuPosition(
-      isFa
-        ? { top: rect.bottom + gap, right: Math.max(8, window.innerWidth - rect.right) }
-        : { top: rect.bottom + gap, left: Math.max(8, rect.left) },
-    );
+    let left = isFa ? rect.right - MENU_MIN_WIDTH : rect.left;
+    left = Math.max(VIEWPORT_PADDING, Math.min(left, maxLeft));
+
+    setMenuPosition({ top: rect.bottom + gap, left });
   };
 
   useLayoutEffect(() => {
@@ -122,8 +124,7 @@ export default function HeaderUserMenu({ compact }: HeaderUserMenuProps) {
               position: "fixed",
               top: menuPosition.top,
               left: menuPosition.left,
-              right: menuPosition.right,
-              zIndex: 100,
+              zIndex: 110,
             }}
             className="min-w-[11rem] rounded-lg border border-gray-200 bg-white py-1 shadow-lg"
           >
