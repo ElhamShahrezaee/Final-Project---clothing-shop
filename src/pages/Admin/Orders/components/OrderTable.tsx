@@ -7,12 +7,14 @@ import {
 import { formatPrice } from "../../../../features/admin/products/utils/formatPrice";
 import { useAdminLocale } from "../../../../hooks/useAdminLocale";
 import Spinner from "../../../../components/common/Spinner/Spinner";
+import AdminCardField from "../../components/AdminCardField";
 
 type OrderTableProps = {
   orders: AdminOrder[];
   isLoading: boolean;
   isError: boolean;
   errorMessage?: string;
+  onChangeStatus: (order: AdminOrder) => void;
 };
 
 const thClass = "px-3 py-3 text-xs font-semibold uppercase tracking-wide text-gray-600";
@@ -26,11 +28,47 @@ const STATUS_STYLES: Record<string, string> = {
   cancelled: "bg-gray-100 text-gray-600",
 };
 
+const actionBtnClass =
+  "w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm font-medium text-gray-800 transition hover:bg-gray-100 lg:w-auto";
+
+function OrderStatusBadge({
+  status,
+  t,
+}: {
+  status: AdminOrder["status"];
+  t: (key: string) => string;
+}) {
+  return (
+    <span
+      className={[
+        "inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium",
+        STATUS_STYLES[status] ?? "bg-gray-100 text-gray-600",
+      ].join(" ")}
+    >
+      {getOrderStatusLabel(status, t)}
+    </span>
+  );
+}
+
+function OrderPaymentBadge({ isPaid, t }: { isPaid: boolean; t: (key: string) => string }) {
+  return (
+    <span
+      className={[
+        "inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium",
+        isPaid ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800",
+      ].join(" ")}
+    >
+      {isPaid ? t("admin.orders.paid") : t("admin.orders.unpaid")}
+    </span>
+  );
+}
+
 export default function OrderTable({
   orders,
   isLoading,
   isError,
   errorMessage,
+  onChangeStatus,
 }: OrderTableProps) {
   const { t } = useTranslation();
   const { isFa, textAlign } = useAdminLocale();
@@ -68,8 +106,85 @@ export default function OrderTable({
   }
 
   return (
-    <div className="h-full min-h-0 overflow-auto">
-      <table className={`w-full min-w-[880px] ${textAlign}`}>
+    <div className={textAlign}>
+      <ul className="space-y-3 p-3 lg:hidden">
+        {orders.map((order) => {
+          const total = getOrderTotal(order.totalPrice, order.orderItems);
+          return (
+            <li
+              key={order.id}
+              className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm"
+            >
+              <div className="flex items-start justify-between gap-2">
+                <div className="min-w-0">
+                  <p className="font-medium text-gray-900">{order.shippingAddress.name}</p>
+                  <p className="mt-0.5 font-mono text-xs text-gray-400" dir="ltr">
+                    #{order.id.slice(-6)}
+                  </p>
+                </div>
+                <OrderStatusBadge status={order.status} t={t} />
+              </div>
+
+              <div className="mt-3 space-y-2">
+                <AdminCardField label={t("admin.orders.table.phone")} valueDir="ltr">
+                  {order.shippingAddress.phone}
+                </AdminCardField>
+                <AdminCardField label={t("admin.orders.table.address")}>
+                  <span className="block max-w-[14rem] whitespace-normal">
+                    {order.shippingAddress.address}
+                  </span>
+                </AdminCardField>
+                <AdminCardField label={t("admin.orders.table.products")}>
+                  <span className="block max-w-[14rem] whitespace-normal text-end">
+                    {formatItemsSummary(order)}
+                  </span>
+                </AdminCardField>
+                <AdminCardField label={t("admin.orders.table.amount")}>
+                  {formatPrice(total, isFa)}
+                </AdminCardField>
+                <AdminCardField label={t("admin.orders.table.payment")}>
+                  <OrderPaymentBadge isPaid={order.isPaid} t={t} />
+                </AdminCardField>
+              </div>
+
+              {order.orderItems.length > 0 ? (
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {order.orderItems.map((item) => (
+                    <div
+                      key={item.id}
+                      className="h-12 w-12 shrink-0 overflow-hidden rounded-lg border border-gray-200 bg-gray-50"
+                    >
+                      {item.image ? (
+                        <img
+                          src={item.image}
+                          alt=""
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <span className="flex h-full w-full items-center justify-center text-[10px] text-gray-400">
+                          —
+                        </span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ) : null}
+
+              <div className="mt-4 border-t border-gray-100 pt-4">
+                <button
+                  type="button"
+                  onClick={() => onChangeStatus(order)}
+                  className={actionBtnClass}
+                >
+                  {t("admin.orders.changeStatus")}
+                </button>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+
+      <table className={`hidden w-full lg:table ${textAlign}`}>
         <thead className="sticky top-0 z-10 border-b border-gray-200 bg-gray-50">
           <tr>
             <th className={thClass}>{t("admin.orders.table.customer")}</th>
@@ -79,13 +194,18 @@ export default function OrderTable({
             <th className={thClass}>{t("admin.orders.table.amount")}</th>
             <th className={thClass}>{t("admin.orders.table.status")}</th>
             <th className={thClass}>{t("admin.orders.table.payment")}</th>
+            <th className={thClass}>{t("admin.common.actions")}</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-100">
           {orders.map((order) => {
             const total = getOrderTotal(order.totalPrice, order.orderItems);
             return (
-              <tr key={order.id} className="hover:bg-gray-50/80">
+              <tr
+                key={order.id}
+                className="cursor-pointer hover:bg-gray-50/80"
+                onClick={() => onChangeStatus(order)}
+              >
                 <td className={tdClass}>
                   <p className="font-medium text-gray-900">{order.shippingAddress.name}</p>
                   <p className="mt-0.5 font-mono text-xs text-gray-400">
@@ -95,32 +215,31 @@ export default function OrderTable({
                 <td className={tdClass} dir="ltr">
                   {order.shippingAddress.phone}
                 </td>
-                <td className={`${tdClass} max-w-[200px] truncate`} title={order.shippingAddress.address}>
+                <td
+                  className={`${tdClass} max-w-[200px] truncate`}
+                  title={order.shippingAddress.address}
+                >
                   {order.shippingAddress.address}
                 </td>
                 <td className={tdClass}>{formatItemsSummary(order)}</td>
                 <td className={tdClass}>{formatPrice(total, isFa)}</td>
                 <td className={tdClass}>
-                  <span
-                    className={[
-                      "inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium",
-                      STATUS_STYLES[order.status] ?? "bg-gray-100 text-gray-600",
-                    ].join(" ")}
-                  >
-                    {getOrderStatusLabel(order.status, t)}
-                  </span>
+                  <OrderStatusBadge status={order.status} t={t} />
                 </td>
                 <td className={tdClass}>
-                  <span
-                    className={[
-                      "inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium",
-                      order.isPaid
-                        ? "bg-green-100 text-green-800"
-                        : "bg-red-100 text-red-800",
-                    ].join(" ")}
+                  <OrderPaymentBadge isPaid={order.isPaid} t={t} />
+                </td>
+                <td className={tdClass}>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onChangeStatus(order);
+                    }}
+                    className="rounded-lg border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-800 transition hover:bg-gray-100"
                   >
-                    {order.isPaid ? t("admin.orders.paid") : t("admin.orders.unpaid")}
-                  </span>
+                    {t("admin.orders.changeStatus")}
+                  </button>
                 </td>
               </tr>
             );

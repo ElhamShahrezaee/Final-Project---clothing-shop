@@ -31,6 +31,7 @@ export interface AdminOrder {
   paymentMethod: string;
   status: OrderStatus;
   isPaid: boolean;
+  createdAt?: string;
 }
 
 export interface AdminOrdersFilters {

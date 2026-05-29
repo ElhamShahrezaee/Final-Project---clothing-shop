@@ -30,6 +30,7 @@ interface RawOrder {
   paymentMethod: string;
   status: OrderStatus;
   isPaid: boolean;
+  createdAt?: string;
 }
 
 interface OrdersListResponse {
@@ -57,6 +58,7 @@ function mapOrder(raw: RawOrder): AdminOrder {
     paymentMethod: raw.paymentMethod,
     status: raw.status,
     isPaid: raw.isPaid,
+    createdAt: raw.createdAt,
   };
 }
 

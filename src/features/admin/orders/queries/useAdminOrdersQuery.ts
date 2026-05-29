@@ -1,20 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { getAdminOrders } from "../api/getAdminOrders";
+import { adminOrderKeys } from "./adminOrderKeys";
 import type { AdminOrdersFilters } from "../types";
-
-function buildQueryKey(filters: AdminOrdersFilters) {
-  return [
-    "admin",
-    "orders",
-    filters.page ?? 1,
-    filters.limit ?? 10,
-    filters.status ?? "all",
-  ] as const;
-}
 
 export function useAdminOrdersQuery(filters: AdminOrdersFilters) {
   return useQuery({
-    queryKey: buildQueryKey(filters),
+    queryKey: adminOrderKeys.list(filters),
     queryFn: () => getAdminOrders(filters),
   });
 }

@@ -278,6 +278,8 @@
   "admin": {
     "panelTitle": "پنل ادمین",
     "logout": "خروج",
+    "openMenu": "باز کردن منو",
+    "closeMenu": "بستن منو",
     "languageToggle": "تغییر زبان",
     "nav": {
       "dashboard": "داشبورد",
@@ -299,9 +301,14 @@
     "dashboard": {
       "title": "داشبورد",
       "subtitle": "نمای کلی فعالیت فروشگاه",
-      "weeklyRevenue": "درآمد هفتگی",
-      "sampleData": "داده نمونه",
-      "last7Days": "۷ روز گذشته"
+      "weeklyRevenue": "درآمد روزانه",
+      "last7Days": "۷ روز گذشته",
+      "statusHint": "فقط سفارش‌های تایید شده، در حال ارسال و تحویل داده شده",
+      "weekTotalLabel": "جمع ۷ روز",
+      "loadError": "خطا در بارگذاری داشبورد",
+      "retry": "تلاش مجدد",
+      "tooltipRevenue": "مبلغ",
+      "tooltipOrders": "تعداد سفارش"
     },
     "common": {
       "cancel": "انصراف",
@@ -401,6 +408,7 @@
       "statusFilter": "وضعیت سفارش",
       "paid": "پرداخت شده",
       "unpaid": "پرداخت نشده",
+      "changeStatus": "تغییر وضعیت",
       "itemsLine": "{{qty}}× {{name}}",
       "itemsMore": "{{line}} و {{count}} مورد دیگر",
       "table": {
@@ -421,6 +429,18 @@
         "shipping": "در حال ارسال",
         "delivered": "تحویل داده شده",
         "cancelled": "لغو شده"
+      },
+      "statusModal": {
+        "title": "جزئیات و تغییر وضعیت سفارش",
+        "orderId": "شناسه سفارش",
+        "newStatus": "وضعیت جدید",
+        "paymentMethod": "روش پرداخت",
+        "itemLine": "{{qty}} عدد × {{price}} = {{total}}",
+        "sections": {
+          "customer": "اطلاعات مشتری",
+          "summary": "خلاصه سفارش",
+          "items": "اقلام سفارش"
+        }
       }
     },
     "validation": {
@@ -441,7 +461,8 @@
       "createProduct": "خطا در ایجاد محصول",
       "updateProduct": "خطا در بروزرسانی محصول",
       "deleteProduct": "خطا در حذف محصول",
-      "fetchOrders": "خطا در دریافت سفارشات"
+      "fetchOrders": "خطا در دریافت سفارشات",
+      "updateOrderStatus": "خطا در بروزرسانی وضعیت سفارش"
     }
   }
 }

@@ -19,14 +19,23 @@ function linkClass(isActive: boolean, textAlign: string) {
   ].join(" ");
 }
 
-export default function AdminSidebar() {
+type AdminSidebarProps = {
+  className?: string;
+  onNavigate?: () => void;
+};
+
+export default function AdminSidebar({ className = "", onNavigate }: AdminSidebarProps) {
   const { t } = useTranslation();
   const { dir, textAlign } = useAdminLocale();
 
   return (
     <aside
       dir={dir}
-      className={`flex h-full w-56 shrink-0 flex-col border-s border-gray-200 bg-white ${textAlign}`}
+      className={[
+        "flex h-full w-56 shrink-0 flex-col border-gray-200 bg-white",
+        dir === "rtl" ? "border-s" : "border-e",
+        className,
+      ].join(" ")}
     >
       <div className="border-b border-gray-200 px-4 py-5">
         <p className="text-lg font-semibold tracking-wide text-gray-900">
@@ -39,6 +48,7 @@ export default function AdminSidebar() {
           <NavLink
             key={to}
             to={to}
+            onClick={onNavigate}
             className={({ isActive }) => linkClass(isActive, textAlign)}
           >
             {t(`admin.nav.${key}`)}

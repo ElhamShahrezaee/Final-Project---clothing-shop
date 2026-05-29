@@ -278,6 +278,8 @@
   "admin": {
     "panelTitle": "Admin panel",
     "logout": "Log out",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
     "languageToggle": "Change language",
     "nav": {
       "dashboard": "Dashboard",
@@ -299,9 +301,14 @@
     "dashboard": {
       "title": "Dashboard",
       "subtitle": "Store activity overview",
-      "weeklyRevenue": "Weekly revenue",
-      "sampleData": "Sample data",
-      "last7Days": "Last 7 days"
+      "weeklyRevenue": "Daily revenue",
+      "last7Days": "Last 7 days",
+      "statusHint": "Confirmed, shipping, and delivered orders only",
+      "weekTotalLabel": "7-day total",
+      "loadError": "Failed to load dashboard",
+      "retry": "Try again",
+      "tooltipRevenue": "Revenue",
+      "tooltipOrders": "Orders"
     },
     "common": {
       "cancel": "Cancel",
@@ -401,6 +408,7 @@
       "statusFilter": "Order status",
       "paid": "Paid",
       "unpaid": "Unpaid",
+      "changeStatus": "Change status",
       "itemsLine": "{{qty}}× {{name}}",
       "itemsMore": "{{line}} and {{count}} more",
       "table": {
@@ -421,6 +429,18 @@
         "shipping": "Shipping",
         "delivered": "Delivered",
         "cancelled": "Cancelled"
+      },
+      "statusModal": {
+        "title": "Order details & status",
+        "orderId": "Order ID",
+        "newStatus": "New status",
+        "paymentMethod": "Payment method",
+        "itemLine": "{{qty}} × {{price}} = {{total}}",
+        "sections": {
+          "customer": "Customer",
+          "summary": "Order summary",
+          "items": "Order items"
+        }
       }
     },
     "validation": {
@@ -441,7 +461,8 @@
       "createProduct": "Failed to create product",
       "updateProduct": "Failed to update product",
       "deleteProduct": "Failed to delete product",
-      "fetchOrders": "Failed to fetch orders"
+      "fetchOrders": "Failed to fetch orders",
+      "updateOrderStatus": "Failed to update order status"
     }
   }
 }
