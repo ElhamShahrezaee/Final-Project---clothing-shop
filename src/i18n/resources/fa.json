@@ -100,6 +100,57 @@
       "saved": "آدرس ذخیره شد"
     }
   },
+  "account": {
+    "orders": {
+      "subtitle": "لیست سفارش‌های شما",
+      "loadError": "خطا در بارگذاری سفارش‌ها",
+      "detailLoadError": "خطا در بارگذاری سفارش",
+      "retry": "تلاش مجدد",
+      "empty": "هنوز سفارشی ثبت نکرده‌اید.",
+      "orderId": "شناسه سفارش",
+      "currency": "تومان",
+      "backToList": "بازگشت به سفارش‌ها",
+      "detailTitle": "جزئیات سفارش",
+      "itemsPreviewSingle": "{{name}} ({{count}} قلم)",
+      "itemsPreview": "{{name}} و {{more}} محصول دیگر ({{count}} قلم)",
+      "noImage": "بدون تصویر",
+      "paidYes": "پرداخت شده",
+      "paidNo": "پرداخت نشده",
+      "quantityLine": "{{qty}} عدد × {{price}} تومان",
+      "sections": {
+        "summary": "خلاصه سفارش",
+        "shipping": "آدرس ارسال",
+        "items": "اقلام سفارش"
+      },
+      "fields": {
+        "status": "وضعیت",
+        "payment": "روش پرداخت",
+        "paid": "وضعیت پرداخت",
+        "total": "مبلغ کل",
+        "name": "نام گیرنده",
+        "phone": "تلفن",
+        "address": "آدرس"
+      },
+      "pagination": {
+        "summary": "نمایش {{from}} تا {{to}} از {{total}} سفارش",
+        "perPage": "تعداد در صفحه",
+        "prev": "قبلی",
+        "next": "بعدی"
+      },
+      "status": {
+        "pending": "در انتظار تایید",
+        "confirmed": "تایید شده",
+        "shipping": "در حال ارسال",
+        "delivered": "تحویل داده شده",
+        "cancelled": "لغو شده"
+      },
+      "paymentMethod": {
+        "cash": "پرداخت نقدی",
+        "credit": "پرداخت اعتباری",
+        "card": "پرداخت با کارت"
+      }
+    }
+  },
   "search": {
     "placeholder": "جستجو",
     "button": "جستجو"

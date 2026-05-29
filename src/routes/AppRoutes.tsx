@@ -22,6 +22,8 @@ import RegisterRoute from "./RegisterRoute";
 import AccountPlaceholder from "../pages/Account/AccountPlaceholder";
 import ProfilePage from "../pages/Account/Profile/ProfilePage";
 import AddressPage from "../pages/Account/Address/AddressPage";
+import UserOrdersPage from "../pages/Account/Orders/UserOrdersPage";
+import UserOrderDetailPage from "../pages/Account/Orders/UserOrderDetailPage";
 import UserProtectedRoute from "./UserProtectedRoute";
 
 const AppRoutes = () => {
@@ -51,11 +53,9 @@ const AppRoutes = () => {
           />
           <Route path="/account/profile" element={<ProfilePage />} />
           <Route path="/account/addresses" element={<AddressPage />} />
+          <Route path="/account/orders" element={<UserOrdersPage />} />
+          <Route path="/account/orders/:orderId" element={<UserOrderDetailPage />} />
         </Route>
-        <Route
-          path="/account/orders"
-          element={<AccountPlaceholder titleKey="auth.account.ordersTitle" />}
-        />
       </Route>
 
       <Route path="/login" element={<UserLoginRoute />} />

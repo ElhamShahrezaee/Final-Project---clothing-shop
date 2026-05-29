@@ -119,7 +119,7 @@ export default function CheckoutPaymentResultPage({ status }: CheckoutPaymentRes
       <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
         {isSuccess && orderResult ? (
           <Link
-            to="/account/orders"
+            to={`/account/orders/${orderResult.orderId}`}
             className="inline-flex h-11 items-center justify-center rounded-full border border-gray-900 px-6 text-sm font-medium transition hover:bg-gray-900 hover:text-white"
           >
             {t("cart.checkout.payment.trackOrder")}

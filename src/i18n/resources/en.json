@@ -100,6 +100,57 @@
       "saved": "Address saved"
     }
   },
+  "account": {
+    "orders": {
+      "subtitle": "Your order history",
+      "loadError": "Failed to load orders",
+      "detailLoadError": "Failed to load order",
+      "retry": "Try again",
+      "empty": "You have not placed any orders yet.",
+      "orderId": "Order ID",
+      "currency": "Toman",
+      "backToList": "Back to orders",
+      "detailTitle": "Order details",
+      "itemsPreviewSingle": "{{name}} ({{count}} items)",
+      "itemsPreview": "{{name}} and {{more}} more products ({{count}} items)",
+      "noImage": "No image",
+      "paidYes": "Paid",
+      "paidNo": "Unpaid",
+      "quantityLine": "{{qty}} × {{price}} Toman",
+      "sections": {
+        "summary": "Order summary",
+        "shipping": "Shipping address",
+        "items": "Order items"
+      },
+      "fields": {
+        "status": "Status",
+        "payment": "Payment method",
+        "paid": "Payment status",
+        "total": "Total",
+        "name": "Recipient",
+        "phone": "Phone",
+        "address": "Address"
+      },
+      "pagination": {
+        "summary": "Showing {{from}} to {{to}} of {{total}} orders",
+        "perPage": "Per page",
+        "prev": "Previous",
+        "next": "Next"
+      },
+      "status": {
+        "pending": "Pending confirmation",
+        "confirmed": "Confirmed",
+        "shipping": "Shipping",
+        "delivered": "Delivered",
+        "cancelled": "Cancelled"
+      },
+      "paymentMethod": {
+        "cash": "Cash",
+        "credit": "Credit",
+        "card": "Card"
+      }
+    }
+  },
   "search": {
     "placeholder": "Search",
     "button": "Search"
