@@ -4,7 +4,8 @@ import MainLayout from "../components/layouts/MainLayout";
 import Products from "../pages/Products/Products";
 import ProductDetails from "../pages/ProductDetails/ProductDetails";
 import Cart from "../pages/Cart/Cart";
-import AddressSelectionPlaceholder from "../pages/Checkout/AddressSelectionPlaceholder";
+import CheckoutAddressPage from "../pages/Checkout/CheckoutAddressPage";
+import CheckoutReviewPage from "../pages/Checkout/CheckoutReviewPage";
 import NotFound from "../pages/NotFound/NotFound";
 import AdminLayout from "../components/layouts/AdminLayout";
 import AdminDashboard from "../pages/Admin/Dashboard/AdminDashboard";
@@ -32,8 +33,13 @@ const AppRoutes = () => {
           path="/checkout"
           element={<AccountPlaceholder titleKey="cart.checkoutTitle" />}
         />
-        <Route path="/checkout/address" element={<AddressSelectionPlaceholder />} />
         <Route element={<UserProtectedRoute />}>
+          <Route path="/checkout/address" element={<CheckoutAddressPage />} />
+          <Route path="/checkout/review" element={<CheckoutReviewPage />} />
+          <Route
+            path="/checkout/payment"
+            element={<AccountPlaceholder titleKey="cart.checkout.paymentTitle" />}
+          />
           <Route path="/account/profile" element={<ProfilePage />} />
           <Route path="/account/addresses" element={<AddressPage />} />
         </Route>

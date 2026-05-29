@@ -1,38 +1,36 @@
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Spinner from "../../components/common/Spinner/Spinner";
-import { useUserAuth } from "../../context/auth/useUserAuth";
 import { useCartQuery } from "../../features/cart/queries/useCartQuery";
-import { useUpdateCartItemMutation } from "../../features/cart/mutations/useUpdateCartItemMutation";
-import { useRemoveCartItemMutation } from "../../features/cart/mutations/useRemoveCartItemMutation";
 import { useAppLocale } from "../../hooks/useAppLocale";
-import { buildLoginPath } from "../../lib/auth/returnUrl";
-import CartItemRow from "./components/CartItemRow";
-import CheckoutSummaryAside from "../Checkout/components/CheckoutSummaryAside";
+import AddressSection, { useCheckoutAddressReady } from "../../components/address/AddressSection";
+import CheckoutCartReview from "./components/CheckoutCartReview";
+import CheckoutSummaryAside from "./components/CheckoutSummaryAside";
 
-export default function Cart() {
+export default function CheckoutReviewPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { isFa, dir, textAlign } = useAppLocale();
-  const { isAuthenticated, isLoading: isAuthLoading } = useUserAuth();
-  const { data: cart, isPending, isFetching, isError, refetch } = useCartQuery();
-  const isCartLoading = isAuthLoading || isPending || isFetching;
-  const updateMutation = useUpdateCartItemMutation();
-  const removeMutation = useRemoveCartItemMutation();
+  const { data: cart, isPending, isError, refetch } = useCartQuery();
+  const { isReady, isPending: isAddressPending } = useCheckoutAddressReady();
+  const [addressError, setAddressError] = useState<string | null>(null);
 
   const items = cart?.items ?? [];
   const totalPrice = cart?.totalPrice ?? 0;
-  const isMutating = updateMutation.isPending || removeMutation.isPending;
+  const isLoading = isPending || isAddressPending;
 
-  const handleConfirm = () => {
-    if (!isAuthenticated) {
-      navigate(buildLoginPath("/cart"));
+  const handleConfirmPay = () => {
+    setAddressError(null);
+    if (!isReady) {
+      setAddressError(t("cart.checkout.addressRequired"));
+      navigate("/checkout/address");
       return;
     }
-    navigate("/checkout/address");
+    navigate("/checkout/payment");
   };
 
-  if (isCartLoading) {
+  if (isLoading) {
     return (
       <div className="flex min-h-[50vh] items-center justify-center">
         <Spinner size="lg" />
@@ -60,7 +58,7 @@ export default function Cart() {
   if (items.length === 0) {
     return (
       <div dir={dir} className={`mx-auto max-w-3xl px-4 py-12 ${textAlign}`}>
-        <h1 className="text-2xl font-semibold text-gray-900">{t("cart.page.title")}</h1>
+        <h1 className="text-2xl font-semibold text-gray-900">{t("cart.checkout.reviewTitle")}</h1>
         <p className="mt-4 text-sm text-gray-600">{t("cart.page.empty")}</p>
         <Link
           to="/products"
@@ -75,42 +73,26 @@ export default function Cart() {
   return (
     <div dir={dir} className={`mx-auto max-w-6xl px-4 py-8 sm:py-10 ${textAlign}`}>
       <h1 className="mb-8 text-center text-2xl font-semibold tracking-wide text-gray-900 sm:text-3xl">
-        {t("cart.page.title")}
+        {t("cart.checkout.reviewTitle")}
       </h1>
 
       <div className="grid gap-8 lg:grid-cols-[1fr_20rem] lg:items-start">
-        <section className="min-w-0 rounded-xl border border-gray-200 bg-white px-5 sm:px-8">
-          {items.map((item) => (
-            <CartItemRow
-              key={item.id}
-              item={item}
-              isFa={isFa}
-              isPending={isMutating}
-              onDecrease={() => {
-                const next = item.quantity - 1;
-                if (next <= 0) {
-                  removeMutation.mutate({ cartItemId: item.id });
-                } else {
-                  updateMutation.mutate({ cartItemId: item.id, quantity: next });
-                }
-              }}
-              onIncrease={() => {
-                updateMutation.mutate({
-                  cartItemId: item.id,
-                  quantity: item.quantity + 1,
-                });
-              }}
-            />
-          ))}
-        </section>
+        <div className="min-w-0 space-y-6">
+          <AddressSection readOnly />
+          {addressError ? (
+            <p className="text-sm text-red-600" role="alert">
+              {addressError}
+            </p>
+          ) : null}
+          <CheckoutCartReview items={items} isFa={isFa} />
+        </div>
 
         <CheckoutSummaryAside
           totalPrice={totalPrice}
           isFa={isFa}
           grandTotalLabel={t("cart.page.grandTotal")}
-          buttonLabel={t("cart.checkout.confirmAndContinue")}
-          onAction={handleConfirm}
-          disabled={isMutating}
+          buttonLabel={t("cart.checkout.confirmAndPay")}
+          onAction={handleConfirmPay}
         />
       </div>
     </div>

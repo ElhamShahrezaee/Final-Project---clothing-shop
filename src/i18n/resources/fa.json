@@ -115,6 +115,20 @@
       "clear": "پاک کردن سبد خرید"
     },
     "addressSelectionTitle": "انتخاب آدرس",
+    "checkout": {
+      "addressTitle": "انتخاب آدرس",
+      "reviewTitle": "بررسی سفارش",
+      "shippingAddress": "آدرس ارسال",
+      "noAddress": "آدرسی ثبت نشده است.",
+      "editAddress": "ویرایش آدرس",
+      "confirm": "تایید",
+      "cancel": "انصراف",
+      "confirmAndContinue": "تایید و ادامه",
+      "confirmAndPay": "تایید و پرداخت",
+      "paymentTitle": "پرداخت",
+      "addressRequired": "لطفاً آدرس ارسال را ثبت کنید.",
+      "quantity": "تعداد"
+    },
     "page": {
       "title": "سبد خرید",
       "empty": "سبد خرید شما خالی است",
@@ -123,7 +137,7 @@
       "unitPrice": "قیمت واحد",
       "lineTotal": "جمع",
       "grandTotal": "مجموع کل",
-      "confirmCheckout": "تایید و ثبت سفارش",
+      "confirmCheckout": "تایید و ادامه",
       "noImage": "بدون تصویر",
       "retry": "تلاش مجدد"
     }

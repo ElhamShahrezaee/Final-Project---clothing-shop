@@ -36,7 +36,7 @@ export default function MiniCartPopover({ open, onClose }: MiniCartPopoverProps)
   const goCheckout = () => {
     onClose();
     if (isAuthenticated) {
-      navigate("/checkout/address");
+      navigate("/cart");
       return;
     }
     if (location.pathname === "/cart") {

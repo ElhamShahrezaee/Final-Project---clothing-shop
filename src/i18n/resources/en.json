@@ -115,6 +115,20 @@
       "clear": "Clear cart"
     },
     "addressSelectionTitle": "Select address",
+    "checkout": {
+      "addressTitle": "Select address",
+      "reviewTitle": "Review order",
+      "shippingAddress": "Shipping address",
+      "noAddress": "No address on file.",
+      "editAddress": "Edit address",
+      "confirm": "Confirm",
+      "cancel": "Cancel",
+      "confirmAndContinue": "Confirm and continue",
+      "confirmAndPay": "Confirm and pay",
+      "paymentTitle": "Payment",
+      "addressRequired": "Please add a shipping address.",
+      "quantity": "Quantity"
+    },
     "page": {
       "title": "Shopping cart",
       "empty": "Your cart is empty",
@@ -123,7 +137,7 @@
       "unitPrice": "Unit price",
       "lineTotal": "Subtotal",
       "grandTotal": "Grand total",
-      "confirmCheckout": "Confirm and checkout",
+      "confirmCheckout": "Confirm and continue",
       "noImage": "No image",
       "retry": "Try again"
     }
